@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,9 @@ class MesasPage extends StatelessWidget {
     final mesasBloc = ProviderBloc.mesas(context);
     mesasBloc.obtenerMesas();
     return Scaffold(
-      backgroundColor: ColorsApp.white,
+      backgroundColor: ColorsApp.orange,
       appBar: AppBar(
-        backgroundColor: ColorsApp.white,
+        backgroundColor: ColorsApp.orange,
         actions: [
           AgregarMesa(),
           SizedBox(
@@ -33,6 +34,7 @@ class MesasPage extends StatelessWidget {
         elevation: 0,
         leading: DrawerMenuWidget(
           onClick: openDrawer,
+          color: Colors.white,
         ),
       ),
       body: StreamBuilder(
@@ -40,29 +42,48 @@ class MesasPage extends StatelessWidget {
         builder: (context, AsyncSnapshot<List<MesasNegocioModel>> mesas) {
           if (mesas.hasData) {
             if (mesas.data.length > 0) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return Stack(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: responsive.wp(3)),
-                    child: Text(
-                      'Mis mesas',
-                      style: TextStyle(fontSize: responsive.ip(5), color: ColorsApp.grey, fontWeight: FontWeight.w600),
+                  Positioned(
+                    top: responsive.hp(25),
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadiusDirectional.only(
+                          topEnd: Radius.circular(150),
+                          //topStart: Radius.circular(10),
+                        ),
+                        color: ColorsApp.white,
+                      ),
                     ),
                   ),
-                  Expanded(
-                    child: GridView.builder(
-                      padding: EdgeInsets.all(10),
-                      itemCount: mesas.data.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: responsive.wp(3)),
+                        child: Text(
+                          'Mis mesas',
+                          style: TextStyle(fontSize: responsive.ip(5), color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _mesaItem(context, responsive, mesas.data[index]);
-                      },
-                    ),
+                      Expanded(
+                        child: GridView.builder(
+                          padding: EdgeInsets.all(10),
+                          itemCount: mesas.data.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1,
+                          ),
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _mesaItem(context, responsive, mesas.data[index]);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               );
@@ -86,31 +107,81 @@ class MesasPage extends StatelessWidget {
         children: [
           Positioned(
             top: 40,
+            left: 3,
             child: Container(
               height: responsive.hp(20),
               width: responsive.wp(40),
-              decoration: BoxDecoration(color: ColorsApp.greenLight, borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorsApp.grey.withOpacity(0.2),
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: Offset(1, 2.5), // changes position of shadow
+                  )
+                ],
+                color: ColorsApp.greenWhite,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: responsive.hp(3),
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: responsive.wp(4),
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            'Cap',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '${mesa.mesaCapacidad}',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: responsive.hp(3)),
+                    child: Text(
+                      '${mesa.mesaNombre}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Positioned(
-              top: -45,
-              right: -5,
+              top: 1,
+              right: -1,
               child: Container(
-                width: responsive.wp(45),
-                child: Image.asset('assets/img/mesa.png'),
+                //height: responsive.hp(30),
+                width: responsive.wp(30),
+                child: (mesa.idMesa == '0') ? Image.asset('assets/img/delivery.png') : Image.asset('assets/img/mesa_madera.png'),
               )),
-          Positioned(
-              bottom: 30,
-              left: 40,
-              child: Column(
-                children: [
-                  Text(
-                    '${mesa.mesaNombre}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.black, fontWeight: FontWeight.w600),
-                  ),
-                ],
-              )),
+          // Positioned(
+          //     bottom: 30,
+          //     left: 45,
+          //     child: Column(
+          //       children: [
+          //         Text(
+          //           '${mesa.mesaNombre}',
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.black, fontWeight: FontWeight.w600),
+          //         ),
+          //       ],
+          //     )),
         ],
       ),
     );
@@ -155,7 +226,7 @@ class _AgregarMesaState extends State<AgregarMesa> {
         width: responsive.ip(4),
         height: responsive.ip(4),
         child: CircleAvatar(
-          backgroundColor: ColorsApp.depBlue,
+          backgroundColor: ColorsApp.greenGrey,
           child: Icon(
             Icons.add,
             color: Colors.white,
@@ -177,6 +248,11 @@ class _AgregarMesaState extends State<AgregarMesa> {
           builder: (BuildContext context, bool data, Widget child) {
             return Stack(
               children: [
+                Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: ColorsApp.orange,
+                ),
                 GestureDetector(
                   onTap: () {
                     FocusScope.of(context).unfocus();
@@ -192,11 +268,12 @@ class _AgregarMesaState extends State<AgregarMesa> {
                         top: responsive.hp(10),
                       ),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadiusDirectional.only(
-                            topEnd: Radius.circular(20),
-                            topStart: Radius.circular(20),
-                          ),
-                          color: Colors.white),
+                        color: Colors.white,
+                        borderRadius: BorderRadiusDirectional.only(
+                          topEnd: Radius.circular(20),
+                          topStart: Radius.circular(20),
+                        ),
+                      ),
                       child: SingleChildScrollView(
                         child: Container(
                           child: Column(
@@ -212,7 +289,7 @@ class _AgregarMesaState extends State<AgregarMesa> {
                                       topEnd: Radius.circular(20),
                                       topStart: Radius.circular(20),
                                     ),
-                                    color: ColorsApp.depOrange),
+                                    color: ColorsApp.greenGrey),
                                 child: Center(
                                   child: Text(
                                     'Agregar Nueva Mesa',

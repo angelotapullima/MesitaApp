@@ -26,6 +26,7 @@ class PedidosPage extends StatelessWidget {
               children: [
                 DrawerMenuWidget(
                   onClick: openDrawer,
+                  color: ColorsApp.grey,
                 ),
                 Column(
                   children: [
