@@ -75,7 +75,7 @@ class MesasPage extends StatelessWidget {
                           itemCount: mesas.data.length,
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            childAspectRatio: 1,
+                            childAspectRatio: 0.9,
                           ),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (BuildContext context, int index) {
