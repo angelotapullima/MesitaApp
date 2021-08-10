@@ -39,6 +39,7 @@ class LoginApi {
           prefs.negocioNombre = decodedData['data']['n_n'];
           prefs.negocioImage = '$apiBaseURL/${decodedData['data']['n_f']}';
           prefs.negocioRuc = decodedData['data']['n_r'];
+          prefs.idSucursal = decodedData['data']['i_d'];
           prefs.token = decodedData['data']['tn'];
           if (prefs.idRol == '2') {
             loginModel.page = 'homePage';

@@ -8,4 +8,5 @@ class ColorsApp {
   static final Color depBlue = Color(0xFF140A72);
   static final Color white = Color(0xFFF6F7FA);
   static final Color orange = Color(0xFFE13E14);
+  static final Color greenLight = Color(0xFF73acbd);
 }

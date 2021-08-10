@@ -75,6 +75,14 @@ class Preferences {
     _prefs.setString('idNegocio', value);
   }
 
+  get idSucursal {
+    return _prefs.getString('idSucursal');
+  }
+
+  set idSucursal(String value) {
+    _prefs.setString('idSucursal', value);
+  }
+
   get negocioNombre {
     return _prefs.getString('negocioNombre');
   }

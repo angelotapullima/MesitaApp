@@ -14,7 +14,7 @@ class CocinaPage extends StatelessWidget {
             preferences.clearPreferences();
             Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
           },
-          child: Text('Cerrar Sesión',
+          child: Text('Cerrar Sesión, Cocina',
               style: TextStyle(
                 color: Colors.black,
               )),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:messita_app/src/pages/AdminPages/mesas_page.dart';
 import 'package:messita_app/src/pages/AdminPages/productos_page.dart';
 import 'package:messita_app/src/widget/draw_items_widget.dart';
 import 'package:messita_app/src/widget/drawer_admin.dart';
 
-import 'pantalla_principal_admin.dart';
+import 'pedidos_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -110,11 +111,15 @@ class _HomePageState extends State<HomePage> {
           openDrawer: openDrawer,
         );
       case DrawerItems.pedidos:
-        return PantallaPrincipal(
+        return PedidosPage(
+          openDrawer: openDrawer,
+        );
+      case DrawerItems.mesas:
+        return MesasPage(
           openDrawer: openDrawer,
         );
       default:
-        return PantallaPrincipal(
+        return PedidosPage(
           openDrawer: openDrawer,
         );
     }

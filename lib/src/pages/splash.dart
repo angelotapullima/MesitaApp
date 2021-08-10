@@ -35,7 +35,7 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
             height: double.infinity,
             width: double.infinity,
             //color: Colors.deepPurple,
-            child: Image.asset('assets/img/back.jpg', fit: BoxFit.cover, gaplessPlayback: true),
+            child: Image.asset('assets/img/back.jpg', fit: BoxFit.cover),
             //child: Image(image: AssetImage('assets/img/pasto2.webp'), fit: BoxFit.cover, gaplessPlayback: true),
           ),
           Container(

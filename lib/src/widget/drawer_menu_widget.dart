@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:messita_app/src/theme/theme.dart';
 
 class DrawerMenuWidget extends StatelessWidget {
   final VoidCallback onClick;
@@ -9,5 +10,6 @@ class DrawerMenuWidget extends StatelessWidget {
       onPressed: onClick,
       icon: Icon(
         Icons.menu,
+        color: ColorsApp.grey,
       ));
 }

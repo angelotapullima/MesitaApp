@@ -14,7 +14,7 @@ class CajeroPage extends StatelessWidget {
             preferences.clearPreferences();
             Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
           },
-          child: Text('Cerrar Sesión',
+          child: Text('Cerrar Sesión, Cajero',
               style: TextStyle(
                 color: Colors.black,
               )),

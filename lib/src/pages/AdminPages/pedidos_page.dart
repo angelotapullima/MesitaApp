@@ -5,9 +5,9 @@ import 'package:messita_app/src/theme/theme.dart';
 import 'package:messita_app/src/utils/responsive.dart';
 import 'package:messita_app/src/widget/drawer_menu_widget.dart';
 
-class PantallaPrincipal extends StatelessWidget {
+class PedidosPage extends StatelessWidget {
   final VoidCallback openDrawer;
-  const PantallaPrincipal({Key key, @required this.openDrawer}) : super(key: key);
+  const PedidosPage({Key key, @required this.openDrawer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
