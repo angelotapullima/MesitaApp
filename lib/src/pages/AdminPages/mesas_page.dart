@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +25,10 @@ class MesasPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: ColorsApp.orange,
         actions: [
-          AgregarMesa(),
-          SizedBox(
-            width: responsive.wp(2),
-          )
+          Padding(
+            padding: EdgeInsets.only(right: responsive.wp(1), top: responsive.hp(1)),
+            child: AgregarMesa(),
+          ),
         ],
         elevation: 0,
         leading: DrawerMenuWidget(
@@ -109,7 +108,7 @@ class MesasPage extends StatelessWidget {
             top: 40,
             left: 3,
             child: Container(
-              height: responsive.hp(20),
+              height: responsive.hp(23),
               width: responsive.wp(40),
               decoration: BoxDecoration(
                 boxShadow: [
@@ -117,7 +116,7 @@ class MesasPage extends StatelessWidget {
                     color: ColorsApp.grey.withOpacity(0.2),
                     spreadRadius: 1,
                     blurRadius: 2,
-                    offset: Offset(1, 2.5), // changes position of shadow
+                    offset: Offset(1, 2.5),
                   )
                 ],
                 color: ColorsApp.greenWhite,
@@ -170,18 +169,6 @@ class MesasPage extends StatelessWidget {
                 width: responsive.wp(30),
                 child: (mesa.idMesa == '0') ? Image.asset('assets/img/delivery.png') : Image.asset('assets/img/mesa_madera.png'),
               )),
-          // Positioned(
-          //     bottom: 30,
-          //     left: 45,
-          //     child: Column(
-          //       children: [
-          //         Text(
-          //           '${mesa.mesaNombre}',
-          //           textAlign: TextAlign.center,
-          //           style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.black, fontWeight: FontWeight.w600),
-          //         ),
-          //       ],
-          //     )),
         ],
       ),
     );

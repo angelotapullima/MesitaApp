@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messita_app/src/pages/AdminPages/mesas_page.dart';
 import 'package:messita_app/src/pages/AdminPages/productos_page.dart';
+import 'package:messita_app/src/utils/responsive.dart';
 import 'package:messita_app/src/widget/draw_items_widget.dart';
 import 'package:messita_app/src/widget/drawer_admin.dart';
 
@@ -24,12 +25,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    openDrawer();
+    closeDrawer();
   }
 
   void openDrawer() => setState(() {
-        xoffset = 230;
-        yoffset = 150;
+        final responsive = Responsive.of(context);
+        xoffset = responsive.wp(60);
+        yoffset = responsive.hp(20);
         scalable = 0.6;
         isOpenDrawing = true;
       });
@@ -42,7 +44,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('value open : $isOpenDrawing');
     return Scaffold(
         body: Stack(
       children: [
