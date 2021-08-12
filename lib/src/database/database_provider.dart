@@ -35,6 +35,16 @@ class DatabaseProvider {
           ' mesaEstado TEXT,'
           ' mesaEstadoAtencion TEXT'
           ')');
+
+      await db.execute(' CREATE TABLE Productos('
+          ' idProducto TEXT PRIMARY KEY,'
+          ' productoNombre TEXT,'
+          ' productoDescripcion TEXT,'
+          ' productoFoto TEXT,'
+          ' productoEstado TEXT,'
+          ' productoPrecioVenta TEXT,'
+          ' productoPrecioEstado TEXT'
+          ')');
     });
   }
 }

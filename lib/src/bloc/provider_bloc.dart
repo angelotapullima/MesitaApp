@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messita_app/src/bloc/login_bloc.dart';
 import 'package:messita_app/src/bloc/mesas_negocio_bloc.dart';
+import 'package:messita_app/src/bloc/productos_bloc.dart';
 
 class ProviderBloc extends InheritedWidget {
   static ProviderBloc _instancia;
@@ -15,6 +16,7 @@ class ProviderBloc extends InheritedWidget {
 
   final loginBloc = LoginBloc();
   final mesasBloc = MesasNegocioBloc();
+  final productosBloc = ProductosBloc();
 
   ProviderBloc._internal({Key key, Widget child}) : super(key: key, child: child);
 
@@ -27,5 +29,9 @@ class ProviderBloc extends InheritedWidget {
 
   static MesasNegocioBloc mesas(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).mesasBloc;
+  }
+
+  static ProductosBloc productos(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).productosBloc;
   }
 }

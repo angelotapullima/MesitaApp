@@ -92,7 +92,7 @@ class MesasPage extends StatelessWidget {
               );
             }
           } else {
-            return _mostrarAlert();
+            return mostrarAlert();
           }
         },
       ),
@@ -170,17 +170,6 @@ class MesasPage extends StatelessWidget {
                 child: (mesa.idMesa == '0') ? Image.asset('assets/img/delivery.png') : Image.asset('assets/img/mesa_madera.png'),
               )),
         ],
-      ),
-    );
-  }
-
-  Widget _mostrarAlert() {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      color: Color.fromRGBO(0, 0, 0, 0.5),
-      child: Center(
-        child: (Platform.isAndroid) ? CircularProgressIndicator() : CupertinoActivityIndicator(),
       ),
     );
   }
