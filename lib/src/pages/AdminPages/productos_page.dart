@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:messita_app/src/pages/AdminPages/Productos/agregar_productos_page.dart';
 import 'package:messita_app/src/theme/theme.dart';
 import 'package:messita_app/src/utils/responsive.dart';
 import 'package:messita_app/src/widget/drawer_menu_widget.dart';
@@ -18,14 +19,34 @@ class ProductosPage extends StatelessWidget {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: responsive.wp(1), top: responsive.hp(1)),
-            child: Container(
-              width: responsive.ip(4),
-              height: responsive.ip(4),
-              child: CircleAvatar(
-                backgroundColor: ColorsApp.orange,
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    opaque: false,
+                    transitionDuration: const Duration(milliseconds: 400),
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return AgregarProductosPage();
+                    },
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Container(
+                width: responsive.ip(4),
+                height: responsive.ip(4),
+                child: CircleAvatar(
+                  backgroundColor: ColorsApp.orange,
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
