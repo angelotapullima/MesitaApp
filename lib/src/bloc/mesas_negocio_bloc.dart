@@ -6,17 +6,26 @@ import 'package:rxdart/rxdart.dart';
 class MesasNegocioBloc {
   final mesasDatabase = MesasNegocioDatabase();
   final mesasApi = MesasNegocioApi();
-  final _cuentaController = BehaviorSubject<List<MesasNegocioModel>>();
+  final _mesasController = BehaviorSubject<List<MesasNegocioModel>>();
+  final _mesasPedidosController = BehaviorSubject<List<MesasNegocioModel>>();
 
-  Stream<List<MesasNegocioModel>> get mesasNegocioStream => _cuentaController.stream;
+  Stream<List<MesasNegocioModel>> get mesasNegocioStream => _mesasController.stream;
+  Stream<List<MesasNegocioModel>> get mesasPedidosStream => _mesasPedidosController.stream;
 
   dispose() {
-    _cuentaController?.close();
+    _mesasController?.close();
+    _mesasPedidosController?.close();
   }
 
   void obtenerMesas() async {
-    _cuentaController.sink.add(await mesasDatabase.obtenerMesas());
+    _mesasController.sink.add(await mesasDatabase.obtenerMesas());
     await mesasApi.obtenerMesasPorSucursal();
-    _cuentaController.sink.add(await mesasDatabase.obtenerMesas());
+    _mesasController.sink.add(await mesasDatabase.obtenerMesas());
+  }
+
+  void obtenerMesasPedidos() async {
+    _mesasPedidosController.sink.add(await mesasDatabase.obtenerMesasPedidos());
+    await mesasApi.obtenerMesasPorSucursal();
+    _mesasPedidosController.sink.add(await mesasDatabase.obtenerMesasPedidos());
   }
 }

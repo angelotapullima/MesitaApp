@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:messita_app/src/api/productos_api.dart';
 import 'package:messita_app/src/bloc/provider_bloc.dart';
 import 'package:messita_app/src/theme/theme.dart';
@@ -22,6 +23,10 @@ class _AgregarProductosPageState extends State<AgregarProductosPage> {
   TextEditingController _nombreProductoController = TextEditingController();
   TextEditingController _precioProductoController = TextEditingController();
   TextEditingController _descripcionProductoController = TextEditingController();
+
+  FocusNode _focusNombre = FocusNode();
+  FocusNode _focusPrecio = FocusNode();
+  FocusNode _focusDescripcion = FocusNode();
 
   File _image;
   final picker = ImagePicker();
@@ -93,170 +98,73 @@ class _AgregarProductosPageState extends State<AgregarProductosPage> {
         child: ValueListenableBuilder(
           valueListenable: _cargando,
           builder: (BuildContext context, bool data, Widget child) {
-            return SingleChildScrollView(
-              child: Stack(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: responsive.hp(.5), horizontal: responsive.wp(3)),
-                        child: Row(
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: KeyboardActions(
+                config: KeyboardActionsConfig(keyboardSeparatorColor: Colors.white, keyboardBarColor: Colors.white, actions: [
+                  KeyboardActionsItem(focusNode: _focusNombre),
+                  KeyboardActionsItem(focusNode: _focusPrecio),
+                  KeyboardActionsItem(focusNode: _focusDescripcion),
+                ]),
+                child: Container(
+                  padding: MediaQuery.of(context).viewInsets,
+                  child: SingleChildScrollView(
+                    child: Stack(
+                      children: [
+                        Column(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: responsive.ip(2.5),
-                                child: Icon(
-                                  Icons.close,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: responsive.hp(74),
-                        margin: EdgeInsets.symmetric(vertical: responsive.hp(1), horizontal: responsive.wp(3)),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(45), color: Colors.white),
-                        child: SingleChildScrollView(
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: -40,
-                                top: 40,
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: ColorsApp.pinkLight,
-                                ),
-                              ),
-                              Positioned(
-                                right: -51,
-                                top: 300,
-                                child: CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: ColorsApp.greenLight,
-                                ),
-                              ),
-                              Column(
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: responsive.hp(.5), horizontal: responsive.wp(3)),
+                              child: Row(
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5)),
-                                    child: Center(
-                                      child: Text('Agregar un nuevo producto',
-                                          style: TextStyle(fontSize: responsive.ip(2.5), color: ColorsApp.greenGrey)),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: responsive.ip(2.5),
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: responsive.hp(74),
+                              margin: EdgeInsets.symmetric(vertical: responsive.hp(1), horizontal: responsive.wp(3)),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(45), color: Colors.white),
+                              child: SingleChildScrollView(
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      left: -40,
+                                      top: 40,
+                                      child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundColor: ColorsApp.pinkLight,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: -51,
+                                      top: 300,
+                                      child: CircleAvatar(
+                                        radius: 40,
+                                        backgroundColor: ColorsApp.greenLight,
+                                      ),
+                                    ),
+                                    Column(
                                       children: [
-                                        Text(
-                                          'Nombre del Producto',
-                                          style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: responsive.wp(2),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5)),
+                                          child: Center(
+                                            child: Text('Agregar un nuevo producto',
+                                                style: TextStyle(fontSize: responsive.ip(2.5), color: ColorsApp.greenGrey)),
                                           ),
-                                          width: responsive.wp(90),
-                                          height: responsive.hp(5),
-                                          child: TextField(
-                                            cursorColor: Colors.black26,
-                                            style: TextStyle(color: Colors.black, fontSize: responsive.ip(2)),
-                                            keyboardType: TextInputType.text,
-                                            //autofocus: true,
-                                            decoration: InputDecoration(
-                                                enabledBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(0xFFCBB6AA)),
-                                                ),
-                                                focusedBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(0xFF2141F3)),
-                                                ),
-                                                border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(0xFFCBB6AA)),
-                                                ),
-                                                hintStyle: TextStyle(color: Colors.black, fontSize: responsive.ip(2)),
-                                                hintText: 'Ingrese nombre'),
-                                            enableInteractiveSelection: false,
-                                            controller: _nombreProductoController,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: responsive.hp(3),
-                                        ),
-                                        Text(
-                                          'Precio del Producto',
-                                          style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: responsive.wp(2),
-                                          ),
-                                          width: responsive.wp(90),
-                                          height: responsive.hp(5),
-                                          child: TextField(
-                                            cursorColor: Colors.black26,
-                                            style: TextStyle(color: Colors.black, fontSize: responsive.ip(2)),
-                                            keyboardType: TextInputType.number,
-                                            //autofocus: true,
-                                            decoration: InputDecoration(
-                                                enabledBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(0xFFCBB6AA)),
-                                                ),
-                                                focusedBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(0xFF2141F3)),
-                                                ),
-                                                border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(0xFFCBB6AA)),
-                                                ),
-                                                hintStyle: TextStyle(color: Colors.black, fontSize: responsive.ip(2)),
-                                                hintText: 'Ingrese precio'),
-                                            enableInteractiveSelection: false,
-                                            controller: _precioProductoController,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: responsive.hp(3),
-                                        ),
-                                        Text(
-                                          'Descripcion',
-                                          style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: responsive.wp(2),
-                                          ),
-                                          width: responsive.wp(90),
-                                          height: responsive.hp(10),
-                                          child: TextField(
-                                            maxLines: 2,
-                                            cursorColor: Colors.black26,
-                                            style: TextStyle(color: Colors.black, fontSize: responsive.ip(2)),
-                                            keyboardType: TextInputType.text,
-                                            //autofocus: true,
-                                            decoration: InputDecoration(
-                                                enabledBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(0xFFCBB6AA)),
-                                                ),
-                                                focusedBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(0xFF2141F3)),
-                                                ),
-                                                border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: Color(0xFFCBB6AA)),
-                                                ),
-                                                hintStyle: TextStyle(color: Colors.black, fontSize: responsive.ip(2)),
-                                                hintText: 'Descripcion'),
-                                            enableInteractiveSelection: false,
-                                            controller: _descripcionProductoController,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: responsive.hp(2),
                                         ),
                                         Padding(
                                           padding: EdgeInsets.symmetric(
@@ -304,77 +212,223 @@ class _AgregarProductosPageState extends State<AgregarProductosPage> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: responsive.hp(2),
-                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: responsive.wp(3),
+                                              ),
+                                              child: Text(
+                                                'Nombre del Producto',
+                                                style:
+                                                    TextStyle(color: ColorsApp.greenGrey, fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsive.hp(.5),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: responsive.wp(3),
+                                              ),
+                                              child: _nombre(responsive),
+                                            ),
+                                            SizedBox(
+                                              height: responsive.hp(1),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: responsive.wp(3),
+                                              ),
+                                              child: Text(
+                                                'Precio del Producto',
+                                                style:
+                                                    TextStyle(color: ColorsApp.greenGrey, fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsive.hp(.5),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: responsive.wp(3),
+                                              ),
+                                              child: _precio(responsive),
+                                            ),
+                                            SizedBox(
+                                              height: responsive.hp(1),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: responsive.wp(3),
+                                              ),
+                                              child: Text(
+                                                'Descripción',
+                                                style:
+                                                    TextStyle(color: ColorsApp.greenGrey, fontSize: responsive.ip(1.8), fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsive.hp(.5),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: responsive.wp(3),
+                                              ),
+                                              child: _descripcion(responsive),
+                                            ),
+                                            SizedBox(
+                                              height: responsive.hp(2),
+                                            ),
+                                          ],
+                                        )
                                       ],
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          _cargando.value = true;
-                          if (_nombreProductoController.text.isNotEmpty) {
-                            if (_precioProductoController.text.isNotEmpty) {
-                              final productoApi = ProductosApi();
-
-                              final res = await productoApi.guardarProducto(
-                                  _image, _nombreProductoController.text, _precioProductoController.text, _descripcionProductoController.text);
-                              if (res) {
-                                showToast2('Producto agregado', ColorsApp.greenGrey);
-                                final productosBloc = ProviderBloc.productos(context);
-                                productosBloc.obtenerProductos();
-                                Navigator.pop(context);
-                              } else {
-                                showToast2('Ocurrió un error', Colors.red);
-                              }
-                            } else {
-                              showToast2('Por favor ingrese el  precio del producto', Colors.black);
-                            }
-                          } else {
-                            showToast2('Por favor ingrese el nombre del producto', Colors.black);
-                          }
-                          _cargando.value = false;
-                        },
-                        child: Container(
-                          height: responsive.hp(7),
-                          margin: EdgeInsets.symmetric(
-                            vertical: responsive.hp(1),
-                            horizontal: responsive.wp(3),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: ColorsApp.blueApp,
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Agregar',
-                              style: TextStyle(color: Colors.white, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () async {
+                                _cargando.value = true;
+                                if (_nombreProductoController.text.isNotEmpty) {
+                                  if (_precioProductoController.text.isNotEmpty) {
+                                    final productoApi = ProductosApi();
+
+                                    final res = await productoApi.guardarProducto(
+                                        _image, _nombreProductoController.text, _precioProductoController.text, _descripcionProductoController.text);
+                                    if (res) {
+                                      showToast2('Producto agregado', ColorsApp.greenGrey);
+                                      final productosBloc = ProviderBloc.productos(context);
+                                      productosBloc.obtenerProductos();
+                                      Navigator.pop(context);
+                                    } else {
+                                      showToast2('Ocurrió un error', Colors.red);
+                                    }
+                                  } else {
+                                    showToast2('Por favor ingrese el  precio del producto', Colors.black);
+                                  }
+                                } else {
+                                  showToast2('Por favor ingrese el nombre del producto', Colors.black);
+                                }
+                                _cargando.value = false;
+                              },
+                              child: Container(
+                                height: responsive.hp(7),
+                                margin: EdgeInsets.symmetric(
+                                  vertical: responsive.hp(1),
+                                  horizontal: responsive.wp(3),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: ColorsApp.blueApp,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Agregar',
+                                    style: TextStyle(color: Colors.white, fontSize: responsive.ip(3), fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
+                        (data)
+                            ? SizedBox(
+                                height: responsive.hp(90),
+                                child: Center(
+                                  child: (Platform.isAndroid) ? CircularProgressIndicator() : CupertinoActivityIndicator(),
+                                ),
+                              )
+                            : Container()
+                      ],
+                    ),
                   ),
-                  (data)
-                      ? SizedBox(
-                          height: responsive.hp(90),
-                          child: Center(
-                            child: (Platform.isAndroid) ? CircularProgressIndicator() : CupertinoActivityIndicator(),
-                          ),
-                        )
-                      : Container()
-                ],
+                ),
               ),
             );
           },
         ),
       ),
+    );
+  }
+
+  Widget _nombre(Responsive responsive) {
+    return TextField(
+      focusNode: _focusNombre,
+      cursorColor: Colors.transparent,
+      keyboardType: TextInputType.text,
+      maxLines: 1,
+
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            vertical: responsive.hp(1),
+            horizontal: responsive.wp(4),
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black26),
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+          ),
+          hintStyle: TextStyle(color: Colors.black45),
+          hintText: 'Nombre del producto'),
+      enableInteractiveSelection: false,
+      controller: _nombreProductoController,
+      //controller: montoPagarontroller,
+    );
+  }
+
+  Widget _descripcion(Responsive responsive) {
+    return TextField(
+      focusNode: _focusDescripcion,
+      cursorColor: Colors.transparent,
+      keyboardType: TextInputType.text,
+      maxLines: 2,
+
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            vertical: responsive.hp(1),
+            horizontal: responsive.wp(4),
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black26),
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+          ),
+          hintStyle: TextStyle(color: Colors.black45),
+          hintText: 'Descripcion'),
+      enableInteractiveSelection: false,
+      controller: _descripcionProductoController,
+      //controller: montoPagarontroller,
+    );
+  }
+
+  Widget _precio(Responsive responsive) {
+    return TextField(
+      focusNode: _focusPrecio,
+      cursorColor: Colors.transparent,
+      keyboardType: TextInputType.number,
+      maxLines: 1,
+
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            vertical: responsive.hp(1),
+            horizontal: responsive.wp(4),
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black26),
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+          ),
+          hintStyle: TextStyle(color: Colors.black45),
+          hintText: 'Precio del producto'),
+      enableInteractiveSelection: false,
+      controller: _precioProductoController,
+      //controller: montoPagarontroller,
     );
   }
 

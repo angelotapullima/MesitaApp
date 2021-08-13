@@ -4,6 +4,7 @@ import 'package:messita_app/src/bloc/provider_bloc.dart';
 import 'package:messita_app/src/model/productos_model.dart';
 import 'package:messita_app/src/pages/AdminPages/Productos/agregar_productos_page.dart';
 import 'package:messita_app/src/pages/AdminPages/Productos/editar_producto_page.dart';
+import 'package:messita_app/src/pages/AdminPages/Productos/mostrar_foto_producto_page.dart';
 import 'package:messita_app/src/theme/theme.dart';
 import 'package:messita_app/src/utils/responsive.dart';
 import 'package:messita_app/src/utils/utils.dart';
@@ -103,30 +104,30 @@ class ProductosPage extends StatelessWidget {
                                   return Container(
                                     margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
                                     height: responsive.hp(20),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          PageRouteBuilder(
-                                            opaque: false,
-                                            transitionDuration: const Duration(milliseconds: 400),
-                                            pageBuilder: (context, animation, secondaryAnimation) {
-                                              return EditarProductoPage(
-                                                producto: snapshot.data[index],
-                                              );
-                                            },
-                                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                              return FadeTransition(
-                                                opacity: animation,
-                                                child: child,
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                      child: Stack(
-                                        children: [
-                                          Container(
+                                    child: Stack(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              PageRouteBuilder(
+                                                opaque: false,
+                                                transitionDuration: const Duration(milliseconds: 400),
+                                                pageBuilder: (context, animation, secondaryAnimation) {
+                                                  return EditarProductoPage(
+                                                    producto: snapshot.data[index],
+                                                  );
+                                                },
+                                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                                  return FadeTransition(
+                                                    opacity: animation,
+                                                    child: child,
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
                                             margin: EdgeInsets.only(left: responsive.wp(2), top: responsive.hp(4), right: responsive.wp(2)),
                                             height: responsive.hp(18),
                                             decoration: BoxDecoration(
@@ -186,9 +187,31 @@ class ProductosPage extends StatelessWidget {
                                               ],
                                             ),
                                           ),
-                                          Positioned(
-                                            left: responsive.wp(5),
-                                            bottom: responsive.hp(2),
+                                        ),
+                                        Positioned(
+                                          left: responsive.wp(5),
+                                          bottom: responsive.hp(2),
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                PageRouteBuilder(
+                                                  opaque: false,
+                                                  transitionDuration: const Duration(milliseconds: 400),
+                                                  pageBuilder: (context, animation, secondaryAnimation) {
+                                                    return MostrarFotoProductoPage(
+                                                      producto: snapshot.data[index],
+                                                    );
+                                                  },
+                                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                                    return FadeTransition(
+                                                      opacity: animation,
+                                                      child: child,
+                                                    );
+                                                  },
+                                                ),
+                                              );
+                                            },
                                             child: Container(
                                               width: responsive.ip(15),
                                               height: responsive.ip(15),
@@ -228,9 +251,9 @@ class ProductosPage extends StatelessWidget {
                                                 ),
                                               ),
                                             ),
-                                          )
-                                        ],
-                                      ),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   );
                                 }))

@@ -26,6 +26,14 @@ class MesasNegocioDatabase {
     return list;
   }
 
+  Future<List<MesasNegocioModel>> obtenerMesasPedidos() async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery("SELECT * FROM Mesas WHERE mesaEstado=='1'");
+
+    List<MesasNegocioModel> list = res.isNotEmpty ? res.map((c) => MesasNegocioModel.fromJson(c)).toList() : [];
+    return list;
+  }
+
   deleteMesas() async {
     final db = await dbprovider.database;
 

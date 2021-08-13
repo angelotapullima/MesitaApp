@@ -214,8 +214,10 @@ class _AgregarMesaState extends State<AgregarMesa> {
 
   void modalAgregarMesa(BuildContext context) {
     showModalBottomSheet(
+      backgroundColor: Colors.transparent,
       context: context,
       isScrollControlled: true,
+      isDismissible: true,
       builder: (BuildContext context) {
         final responsive = Responsive.of(context);
 
@@ -224,11 +226,6 @@ class _AgregarMesaState extends State<AgregarMesa> {
           builder: (BuildContext context, bool data, Widget child) {
             return Stack(
               children: [
-                Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  color: ColorsApp.orange,
-                ),
                 GestureDetector(
                   onTap: () {
                     FocusScope.of(context).unfocus();
@@ -239,10 +236,8 @@ class _AgregarMesaState extends State<AgregarMesa> {
                       KeyboardActionsItem(focusNode: _focusCapacidadMesa),
                     ]),
                     child: Container(
-                      padding: MediaQuery.of(context).viewInsets,
-                      margin: EdgeInsets.only(
-                        top: responsive.hp(10),
-                      ),
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      margin: EdgeInsets.only(top: responsive.hp(20)),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadiusDirectional.only(

@@ -26,6 +26,14 @@ class ProductosDatabase {
     return list;
   }
 
+  Future<List<ProductosModel>> obtenerProductosPorQuery(String query) async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery("SELECT * FROM Productos WHERE productoNombre LIKE '%$query%' AND productoEstado='1' ");
+
+    List<ProductosModel> list = res.isNotEmpty ? res.map((c) => ProductosModel.fromJson(c)).toList() : [];
+    return list;
+  }
+
   deleteProductos() async {
     final db = await dbprovider.database;
 

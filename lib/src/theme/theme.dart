@@ -12,6 +12,10 @@ class ColorsApp {
   static final Color greenWhite = Color(0xFFE2F3FB);
   static final Color pinkLight = Color(0xFFFFE6E7);
   static final Color purple = Color(0xFFC6AFE9);
+  static final Color redOrange = Color(0xFFF33E42);
+  static final Color greenLemon = Color(0xFF8FD418);
+  static final Color orangeLight = Color(0xFFFF9635);
+  static final Color yellowDeep = Color(0xFFFED600);
 }
 
 class ColorsGrid {
