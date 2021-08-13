@@ -16,6 +16,10 @@ class ColorsApp {
   static final Color greenLemon = Color(0xFF8FD418);
   static final Color orangeLight = Color(0xFFFF9635);
   static final Color yellowDeep = Color(0xFFFED600);
+  static final Color mostaza = Color(0xFFF3BC58);
+  static final Color cream = Color(0xFFF8E9CA);
+  static final Color brown = Color(0xFF4D3D23);
+  static final Color black = Color(0xFF08090D);
 }
 
 class ColorsGrid {

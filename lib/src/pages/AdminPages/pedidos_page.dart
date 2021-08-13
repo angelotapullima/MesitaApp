@@ -18,9 +18,9 @@ class PedidosPage extends StatelessWidget {
     final mesasBloc = ProviderBloc.mesas(context);
     mesasBloc.obtenerMesasPedidos();
     return Scaffold(
-      backgroundColor: ColorsApp.redOrange,
+      backgroundColor: ColorsApp.depOrange,
       appBar: AppBar(
-        backgroundColor: ColorsApp.redOrange,
+        backgroundColor: ColorsApp.depOrange,
         actions: [
           // Padding(
           //   padding: EdgeInsets.only(right: responsive.wp(1), top: responsive.hp(1)),
