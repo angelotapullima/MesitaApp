@@ -53,7 +53,7 @@ class ProductosApi {
       if (_image != null) {
         var stream = new http.ByteStream(Stream.castFrom(_image.openRead()));
         var length = await _image.length();
-        multipartFile = new http.MultipartFile('equipo_imagen', stream, length, filename: basename(_image.path));
+        multipartFile = new http.MultipartFile('producto_foto', stream, length, filename: basename(_image.path));
       }
 
       var request = new http.MultipartRequest("POST", uri);
@@ -87,6 +87,78 @@ class ProductosApi {
       return resp;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
+      return false;
+    }
+  }
+
+  Future<bool> editarProducto(File _image, String idProducto, String nombreproducto, String descripcionProducto) async {
+    try {
+      final uri = Uri.parse('$apiBaseURL/api/Producto/editar_producto');
+      bool resp = false;
+
+      var multipartFile;
+
+      if (_image != null) {
+        var stream = new http.ByteStream(Stream.castFrom(_image.openRead()));
+        var length = await _image.length();
+        multipartFile = new http.MultipartFile('producto_foto_e', stream, length, filename: basename(_image.path));
+      }
+
+      var request = new http.MultipartRequest("POST", uri);
+
+      request.fields["tn"] = preferences.token;
+      request.fields["app"] = 'true';
+      request.fields["producto_nombre_e"] = '$nombreproducto';
+      request.fields["producto_descripcion_e"] = '$descripcionProducto';
+      request.fields["id_producto"] = '$idProducto';
+
+      if (_image != null) {
+        request.files.add(multipartFile);
+      }
+
+      await request.send().then((response) async {
+        // listen for response
+        response.stream.transform(utf8.decoder).listen((value) {
+          final decodedData = json.decode(value);
+          print(decodedData);
+          if (decodedData['result']['code'] == 1) {
+            resp = true;
+          } else {
+            resp = false;
+          }
+        });
+      }).catchError((e) {
+        print(e);
+        return false;
+      });
+
+      return resp;
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return false;
+    }
+  }
+
+  Future<bool> editarPrecioProducto(String idProducto, String precioProducto) async {
+    try {
+      final url = Uri.parse('$apiBaseURL/api/Producto/agregar_nuevo_precio');
+
+      final resp = await http.post(url, body: {
+        'tn': '${preferences.token}',
+        'id_producto': '$idProducto',
+        'producto_precio_venta_a': '$precioProducto',
+        'app': 'true',
+      });
+
+      final decodedData = json.decode(resp.body);
+      print('Datos editar precio venta: $decodedData');
+
+      if (decodedData['result']['code'] == 1) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
       return false;
     }
   }

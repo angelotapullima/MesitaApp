@@ -143,11 +143,8 @@ class _AgregarProductosPageState extends State<AgregarProductosPage> {
                               ),
                               Column(
                                 children: [
-                                  SizedBox(
-                                    height: responsive.hp(1.5),
-                                  ),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(vertical: responsive.hp(3)),
+                                    padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5)),
                                     child: Center(
                                       child: Text('Agregar un nuevo producto',
                                           style: TextStyle(fontSize: responsive.ip(2.5), color: ColorsApp.greenGrey)),
@@ -385,9 +382,10 @@ class _AgregarProductosPageState extends State<AgregarProductosPage> {
     if (_image != null) {
       return Center(
         child: Container(
-          height: responsive.ip(20),
+          height: responsive.ip(15),
           // width: responsive.wp(30),
           child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
             child: Image.file(_image),
           ),
         ),

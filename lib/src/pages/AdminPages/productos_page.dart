@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:messita_app/src/bloc/provider_bloc.dart';
 import 'package:messita_app/src/model/productos_model.dart';
 import 'package:messita_app/src/pages/AdminPages/Productos/agregar_productos_page.dart';
+import 'package:messita_app/src/pages/AdminPages/Productos/editar_producto_page.dart';
 import 'package:messita_app/src/theme/theme.dart';
 import 'package:messita_app/src/utils/responsive.dart';
 import 'package:messita_app/src/utils/utils.dart';
@@ -102,110 +103,134 @@ class ProductosPage extends StatelessWidget {
                                   return Container(
                                     margin: EdgeInsets.symmetric(vertical: responsive.hp(1)),
                                     height: responsive.hp(20),
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(left: responsive.wp(2), top: responsive.hp(4), right: responsive.wp(2)),
-                                          height: responsive.hp(18),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20),
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: ColorsApp.grey.withOpacity(0.2),
-                                                spreadRadius: 2,
-                                                blurRadius: 10,
-                                                offset: Offset(1, 3), // changes position of shadow
-                                              )
-                                            ],
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            opaque: false,
+                                            transitionDuration: const Duration(milliseconds: 400),
+                                            pageBuilder: (context, animation, secondaryAnimation) {
+                                              return EditarProductoPage(
+                                                producto: snapshot.data[index],
+                                              );
+                                            },
+                                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                              return FadeTransition(
+                                                opacity: animation,
+                                                child: child,
+                                              );
+                                            },
                                           ),
-                                          child: Row(
-                                            children: [
-                                              Spacer(),
-                                              Container(
-                                                width: responsive.wp(60),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      height: responsive.hp(1),
-                                                    ),
-                                                    Text(
-                                                      '${snapshot.data[index].productoNombre}',
-                                                      style: TextStyle(
-                                                          fontSize: responsive.ip(2.2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
-                                                    ),
-                                                    Text('${snapshot.data[index].productoDescripcion}'),
-                                                    Spacer(),
-                                                    Row(
-                                                      children: [
-                                                        Spacer(),
-                                                        Text(
-                                                          'S/ ${snapshot.data[index].productoPrecioVenta}',
-                                                          style: TextStyle(
-                                                              fontSize: responsive.ip(2.2), color: ColorsApp.depOrange, fontWeight: FontWeight.bold),
-                                                        ),
-                                                        SizedBox(
-                                                          width: responsive.wp(1),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      height: responsive.hp(0.5),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: responsive.wp(1),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: responsive.wp(5),
-                                          bottom: responsive.hp(2),
-                                          child: Container(
-                                            width: responsive.ip(15),
-                                            height: responsive.ip(15),
+                                        );
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(left: responsive.wp(2), top: responsive.hp(4), right: responsive.wp(2)),
+                                            height: responsive.hp(18),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(100),
+                                              borderRadius: BorderRadius.circular(20),
+                                              color: Colors.white,
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: ColorsApp.grey.withOpacity(0.9),
-                                                  spreadRadius: 1,
+                                                  color: ColorsApp.grey.withOpacity(0.2),
+                                                  spreadRadius: 2,
                                                   blurRadius: 10,
-                                                  offset: Offset(2, 4),
+                                                  offset: Offset(1, 3), // changes position of shadow
                                                 )
                                               ],
                                             ),
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(100),
-                                              child: CachedNetworkImage(
-                                                placeholder: (context, url) => Container(
-                                                  width: double.infinity,
-                                                  height: double.infinity,
-                                                  child: Image(image: AssetImage('assets/img/loading.gif'), fit: BoxFit.cover),
+                                            child: Row(
+                                              children: [
+                                                Spacer(),
+                                                Container(
+                                                  width: responsive.wp(60),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      SizedBox(
+                                                        height: responsive.hp(1.5),
+                                                      ),
+                                                      Text(
+                                                        '${snapshot.data[index].productoNombre}',
+                                                        style: TextStyle(
+                                                            fontSize: responsive.ip(2.3), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
+                                                      ),
+                                                      Text('${snapshot.data[index].productoDescripcion}'),
+                                                      Spacer(),
+                                                      Row(
+                                                        children: [
+                                                          Spacer(),
+                                                          Text(
+                                                            'S/ ${snapshot.data[index].productoPrecioVenta}',
+                                                            style: TextStyle(
+                                                                fontSize: responsive.ip(2.2),
+                                                                color: ColorsApp.depOrange,
+                                                                fontWeight: FontWeight.bold),
+                                                          ),
+                                                          SizedBox(
+                                                            width: responsive.wp(5),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: responsive.hp(1),
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
-                                                errorWidget: (context, url, error) => Container(
-                                                  width: double.infinity,
-                                                  height: double.infinity,
-                                                  child: Image(image: AssetImage('assets/img/food.jpg'), fit: BoxFit.cover),
-                                                ),
-                                                imageUrl: '',
-                                                imageBuilder: (context, imageProvider) => Container(
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
+                                                SizedBox(
+                                                  width: responsive.wp(1),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Positioned(
+                                            left: responsive.wp(5),
+                                            bottom: responsive.hp(2),
+                                            child: Container(
+                                              width: responsive.ip(15),
+                                              height: responsive.ip(15),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(100),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: ColorsApp.grey.withOpacity(0.9),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 10,
+                                                    offset: Offset(2, 4),
+                                                  )
+                                                ],
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(100),
+                                                child: CachedNetworkImage(
+                                                  placeholder: (context, url) => Container(
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                    child: Image(image: AssetImage('assets/img/loading.gif'), fit: BoxFit.cover),
+                                                  ),
+                                                  errorWidget: (context, url, error) => Container(
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                    child: Image(image: AssetImage('assets/img/food.jpg'), fit: BoxFit.cover),
+                                                  ),
+                                                  imageUrl: '${snapshot.data[index].productoFoto}',
+                                                  imageBuilder: (context, imageProvider) => Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                      ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   );
                                 }))
