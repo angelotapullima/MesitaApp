@@ -237,7 +237,7 @@ class _AgregarProductosPageState extends State<AgregarProductosPage> {
                                             maxLines: 2,
                                             cursorColor: Colors.black26,
                                             style: TextStyle(color: Colors.black, fontSize: responsive.ip(2)),
-                                            keyboardType: TextInputType.number,
+                                            keyboardType: TextInputType.text,
                                             //autofocus: true,
                                             decoration: InputDecoration(
                                                 enabledBorder: UnderlineInputBorder(
