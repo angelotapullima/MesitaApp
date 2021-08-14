@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:messita_app/src/bloc/provider_bloc.dart';
 import 'package:messita_app/src/model/mesas_negocio_model.dart';
+import 'package:messita_app/src/model/pedidos_mesa_model.dart';
 import 'package:messita_app/src/model/productos_model.dart';
 import 'package:messita_app/src/pages/AdminPages/Productos/mostrar_foto_producto_page.dart';
 import 'package:messita_app/src/theme/theme.dart';
@@ -18,6 +19,9 @@ class PedidosDetallePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
     final busquedaBloc = ProviderBloc.productos(context);
+    final pedidosBloc = ProviderBloc.pedidos(context);
+    pedidosBloc.obtenerPedidosPorMesa(this.mesa.idMesa);
+    pedidosBloc.obtenerPedidosTemporalesPorMesa(this.mesa.idMesa);
     if (cargaInicial == 0) {
       busquedaBloc.obtenerProductosPorQuery('');
       cargaInicial++;
@@ -237,7 +241,32 @@ class PedidosDetallePage extends StatelessWidget {
                               }),
                         );
                       } else {
-                        return Container();
+                        return StreamBuilder(
+                          stream: pedidosBloc.pedidosMesaStream,
+                          builder: (context, AsyncSnapshot<List<PedidoMesaModel>> snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data.length > 0) {
+                                return Column(
+                                  children: [
+                                    Container(
+                                      child: Text('${snapshot.data[0].numeroPedido}'),
+                                    ),
+                                    Expanded(
+                                        child: ListView.builder(
+                                            itemCount: snapshot.data[0].detalle.length,
+                                            itemBuilder: (_, index) {
+                                              return Container();
+                                            }))
+                                  ],
+                                );
+                              } else {
+                                return Container();
+                              }
+                            } else {
+                              return Container();
+                            }
+                          },
+                        );
                       }
                     } else {
                       return Container();

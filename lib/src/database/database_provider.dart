@@ -45,6 +45,42 @@ class DatabaseProvider {
           ' productoPrecioVenta TEXT,'
           ' productoPrecioEstado TEXT'
           ')');
+
+      await db.execute(' CREATE TABLE PedidosMesa('
+          ' idPedido TEXT PRIMARY KEY,'
+          ' idMesa TEXT,'
+          ' numeroPedido TEXT,'
+          ' total TEXT,'
+          ' numeroPersonas TEXT,'
+          ' fecha TEXT,'
+          ' estado TEXT'
+          ')');
+
+      await db.execute(' CREATE TABLE DetallePedidosMesa('
+          ' idDetallePedido TEXT PRIMARY KEY,'
+          ' idPedido TEXT,'
+          ' idProducto TEXT,'
+          ' despacho TEXT,'
+          ' observacion TEXT,'
+          ' precio TEXT,'
+          ' cantidad TEXT,'
+          ' total TEXT,'
+          ' fecha TEXT,'
+          ' fechaEntrega TEXT,'
+          ' estadoVenta TEXT,'
+          ' estado TEXT'
+          ')');
+
+      await db.execute(' CREATE TABLE PedidosMesaTemporal('
+          ' id INTEGER PRIMARY KEY AUTOINCREMENT,'
+          ' idMesa TEXT,'
+          ' idProducto TEXT,'
+          ' nombre TEXT,'
+          ' precio TEXT,'
+          ' cantidad TEXT,'
+          ' observacion TEXT,'
+          ' total TEXT'
+          ')');
     });
   }
 }

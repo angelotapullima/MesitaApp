@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:messita_app/src/bloc/login_bloc.dart';
 import 'package:messita_app/src/bloc/mesas_negocio_bloc.dart';
+import 'package:messita_app/src/bloc/navegacion_bottom_bloc.dart';
+import 'package:messita_app/src/bloc/pedidos_mesa_bloc.dart';
 import 'package:messita_app/src/bloc/productos_bloc.dart';
 
 class ProviderBloc extends InheritedWidget {
@@ -15,8 +17,10 @@ class ProviderBloc extends InheritedWidget {
   }
 
   final loginBloc = LoginBloc();
+  final bottomNavicBloc = BottomNaviBloc();
   final mesasBloc = MesasNegocioBloc();
   final productosBloc = ProductosBloc();
+  final pedidosBloc = PedidosMesaBloc();
 
   ProviderBloc._internal({Key key, Widget child}) : super(key: key, child: child);
 
@@ -27,11 +31,19 @@ class ProviderBloc extends InheritedWidget {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).loginBloc;
   }
 
+  static BottomNaviBloc bottomNavic(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).bottomNavicBloc;
+  }
+
   static MesasNegocioBloc mesas(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).mesasBloc;
   }
 
   static ProductosBloc productos(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).productosBloc;
+  }
+
+  static PedidosMesaBloc pedidos(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).pedidosBloc;
   }
 }
