@@ -23,9 +23,10 @@ class PedidosDatabase {
     try {
       final db = await dbprovider.database;
 
-      final res = await db.rawInsert("INSERT OR REPLACE INTO DetallePedidosMesa (idDetallePedido,idPedido,idProducto,despacho,observacion,precio,"
+      final res = await db.rawInsert(
+          "INSERT OR REPLACE INTO DetallePedidosMesa (idDetallePedido,idPedido,idProducto,nombre,foto,despacho,observacion,precio,"
           "cantidad,total,fecha,fechaEntrega,estadoVenta,estado) "
-          "VALUES ('${detallePedido.idDetallePedido}','${detallePedido.idPedido}','${detallePedido.idProducto}','${detallePedido.despacho}','${detallePedido.observacion}','${detallePedido.precio}','${detallePedido.cantidad}','${detallePedido.total}','${detallePedido.fecha}','${detallePedido.fechaEntrega}','${detallePedido.estadoVenta}','${detallePedido.estado}')");
+          "VALUES ('${detallePedido.idDetallePedido}','${detallePedido.idPedido}','${detallePedido.idProducto}','${detallePedido.nombre}','${detallePedido.foto}','${detallePedido.despacho}','${detallePedido.observacion}','${detallePedido.precio}','${detallePedido.cantidad}','${detallePedido.total}','${detallePedido.fecha}','${detallePedido.fechaEntrega}','${detallePedido.estadoVenta}','${detallePedido.estado}')");
 
       return res;
     } catch (exception) {

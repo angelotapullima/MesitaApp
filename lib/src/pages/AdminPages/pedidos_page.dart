@@ -137,7 +137,7 @@ class PedidosPage extends StatelessWidget {
                       offset: Offset(1, 2.5),
                     )
                   ],
-                  color: ColorsApp.greenLemon,
+                  color: (mesa.mesaEstadoAtencion == '1') ? ColorsApp.redOrange : ColorsApp.greenLemon,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(

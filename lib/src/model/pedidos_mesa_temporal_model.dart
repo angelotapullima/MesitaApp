@@ -1,8 +1,9 @@
 class PedidoMesaTemporalModel {
-  String id;
+  int id;
   String idMesa;
   String idProducto;
   String nombre;
+  String foto;
   String precio;
   String cantidad;
   String observacion;
@@ -13,6 +14,7 @@ class PedidoMesaTemporalModel {
     this.idMesa,
     this.idProducto,
     this.nombre,
+    this.foto,
     this.precio,
     this.cantidad,
     this.observacion,
@@ -22,6 +24,8 @@ class PedidoMesaTemporalModel {
         id: json["id"],
         idMesa: json["idMesa"],
         idProducto: json["idProducto"],
+        nombre: json["nombre"],
+        foto: json["foto"],
         precio: json["precio"],
         cantidad: json["cantidad"],
         observacion: json["observacion"],

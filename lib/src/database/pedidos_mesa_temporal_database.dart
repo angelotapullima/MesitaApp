@@ -8,9 +8,9 @@ class PedidosTemporalDatabase {
     try {
       final db = await dbprovider.database;
 
-      final res = await db.rawInsert("INSERT OR REPLACE INTO PedidosMesaTemporal (id,idMesa,idProducto,nombre,precio,"
+      final res = await db.rawInsert("INSERT OR REPLACE INTO PedidosMesaTemporal (idMesa,idProducto,nombre,foto,precio,"
           "cantidad,observacion,total) "
-          "VALUES ('${pedidoTemporal.id}','${pedidoTemporal.idMesa}','${pedidoTemporal.idProducto}','${pedidoTemporal.nombre}','${pedidoTemporal.precio}','${pedidoTemporal.cantidad}','${pedidoTemporal.observacion}','${pedidoTemporal.total}')");
+          "VALUES ('${pedidoTemporal.idMesa}','${pedidoTemporal.idProducto}','${pedidoTemporal.nombre}','${pedidoTemporal.foto}','${pedidoTemporal.precio}','${pedidoTemporal.cantidad}','${pedidoTemporal.observacion}','${pedidoTemporal.total}')");
 
       return res;
     } catch (exception) {

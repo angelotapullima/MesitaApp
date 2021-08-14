@@ -33,6 +33,8 @@ class DetallePedidoMesaModel {
         idDetallePedido: json["idDetallePedido"],
         idPedido: json["idPedido"],
         idProducto: json["idProducto"],
+        nombre: json["nombre"],
+        foto: json["foto"],
         despacho: json["despacho"],
         observacion: json["observacion"],
         precio: json["precio"],
