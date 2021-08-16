@@ -28,4 +28,10 @@ class MesasNegocioBloc {
     await mesasApi.obtenerMesasPorSucursal();
     _mesasPedidosController.sink.add(await mesasDatabase.obtenerMesasPedidos());
   }
+
+  void obtenerMesasPedidosCaja() async {
+    _mesasPedidosController.sink.add(await mesasDatabase.obtenerMesasPedidosCaja());
+    await mesasApi.obtenerMesasPorSucursal();
+    _mesasPedidosController.sink.add(await mesasDatabase.obtenerMesasPedidosCaja());
+  }
 }

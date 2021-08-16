@@ -220,6 +220,8 @@ class _LoginPageState extends State<LoginPage> {
     final LoginModel code = await bloc.login('${bloc.usuario}', '${bloc.password}');
 
     if (code.code == '1') {
+      final bottomBloc = ProviderBloc.bottomNavic(context);
+      bottomBloc.changePage(0);
       Navigator.pushReplacementNamed(context, code.page);
     } else if (code.code == '2') {
       showToast2('${code.message}', Colors.red);

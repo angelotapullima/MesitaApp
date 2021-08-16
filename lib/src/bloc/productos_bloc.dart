@@ -23,6 +23,12 @@ class ProductosBloc {
     _productosController.sink.add(await productosDatabase.obtenerProductos());
   }
 
+  void obtenerProductosPorQueryPageMozo(String query) async {
+    _productosController.sink.add(await productosDatabase.obtenerProductosPorQuery(query));
+    await productosApi.obtenerProductos();
+    _productosController.sink.add(await productosDatabase.obtenerProductosPorQuery(query));
+  }
+
   void obtenerProductosPorQuery(String query) async {
     _productosBusquedaController.sink.add([]);
     if (query != '') {

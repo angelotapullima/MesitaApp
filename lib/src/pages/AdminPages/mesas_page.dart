@@ -119,7 +119,7 @@ class MesasPage extends StatelessWidget {
                     offset: Offset(1, 2.5),
                   )
                 ],
-                color: ColorsApp.greenWhite,
+                color: ColorsApp.greenLemon,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(

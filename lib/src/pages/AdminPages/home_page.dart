@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:messita_app/src/pages/AdminPages/info_admin_page.dart';
 import 'package:messita_app/src/pages/AdminPages/mesas_page.dart';
 import 'package:messita_app/src/pages/AdminPages/productos_page.dart';
+import 'package:messita_app/src/pages/InfoUser/cerrar_sesion.dart';
 import 'package:messita_app/src/utils/responsive.dart';
 import 'package:messita_app/src/widget/draw_items_widget.dart';
 import 'package:messita_app/src/widget/drawer_admin.dart';
@@ -119,6 +121,12 @@ class _HomePageState extends State<HomePage> {
         return MesasPage(
           openDrawer: openDrawer,
         );
+      case DrawerItems.info:
+        return InfoAdminPage(
+          openDrawer: openDrawer,
+        );
+      case DrawerItems.logout:
+        return CerrarSession();
       default:
         return PedidosPage(
           openDrawer: openDrawer,

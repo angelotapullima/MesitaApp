@@ -1,6 +1,7 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:messita_app/src/bloc/provider_bloc.dart';
 import 'package:messita_app/src/prefences/preferences.dart';
 
 class Splash extends StatefulWidget {
@@ -20,6 +21,8 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
       if (preferences.idUser.toString().isEmpty || preferences.idUser == null || preferences.idUser == '0') {
         Navigator.pushReplacementNamed(context, 'login');
       } else {
+        final bottomBloc = ProviderBloc.bottomNavic(context);
+        bottomBloc.changePage(0);
         Navigator.pushReplacementNamed(context, preferences.pageInit);
       }
     });

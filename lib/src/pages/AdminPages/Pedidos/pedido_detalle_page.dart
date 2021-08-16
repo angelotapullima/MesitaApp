@@ -5,16 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:messita_app/src/api/pedidos_mesa_api.dart';
 import 'package:messita_app/src/bloc/provider_bloc.dart';
-import 'package:messita_app/src/database/pedidos_mesa_temporal_database.dart';
-import 'package:messita_app/src/model/detalle_pedido_mesa_model.dart';
 import 'package:messita_app/src/model/mesas_negocio_model.dart';
 import 'package:messita_app/src/model/pedidos_mesa_model.dart';
 import 'package:messita_app/src/model/pedidos_mesa_temporal_model.dart';
 import 'package:messita_app/src/model/productos_model.dart';
 import 'package:messita_app/src/pages/AdminPages/Productos/mostrar_foto_producto_page.dart';
+import 'package:messita_app/src/prefences/preferences.dart';
 import 'package:messita_app/src/theme/theme.dart';
 import 'package:messita_app/src/utils/responsive.dart';
 import 'package:messita_app/src/utils/utils.dart';
+import 'package:messita_app/src/widget/widgets.dart';
 
 class PedidosDetallePage extends StatelessWidget {
   final MesasNegocioModel mesa;
@@ -29,6 +29,7 @@ class PedidosDetallePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final prefences = Preferences();
     final responsive = Responsive.of(context);
     final busquedaBloc = ProviderBloc.productos(context);
     final pedidosBloc = ProviderBloc.pedidos(context);
@@ -93,23 +94,25 @@ class PedidosDetallePage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: responsive.wp(3), vertical: responsive.hp(2)),
-                        child: CupertinoSearchTextField(
-                          controller: _query,
-                          backgroundColor: ColorsApp.white,
-                          placeholder: 'Buscar producto',
-                          onChanged: (value) {
-                            if (value != '') {
-                              busquedaBloc.obtenerProductosPorQuery(value);
-                            } else {
-                              _query.text = '';
-                              busquedaBloc.obtenerProductosPorQuery(_query.text);
-                            }
-                          },
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
+                      (prefences.idRol != '5')
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(horizontal: responsive.wp(3), vertical: responsive.hp(2)),
+                              child: CupertinoSearchTextField(
+                                controller: _query,
+                                backgroundColor: ColorsApp.white,
+                                placeholder: 'Buscar producto',
+                                onChanged: (value) {
+                                  if (value != '') {
+                                    busquedaBloc.obtenerProductosPorQuery(value);
+                                  } else {
+                                    _query.text = '';
+                                    busquedaBloc.obtenerProductosPorQuery(_query.text);
+                                  }
+                                },
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            )
+                          : Container(),
                       StreamBuilder(
                         stream: busquedaBloc.productosBusquedaStream,
                         builder: (BuildContext context, AsyncSnapshot<List<ProductosModel>> snapshot) {
@@ -131,7 +134,7 @@ class PedidosDetallePage extends StatelessWidget {
                                                 busquedaBloc.obtenerProductosPorQuery(_query.text);
                                                 FocusManager.instance.primaryFocus?.unfocus();
 
-                                                modalAgregarPedido(context, snapshot.data[index]);
+                                                modalAgregarPedido(context, snapshot.data[index], hayPedido, idComanda, this.mesa.idMesa);
                                               },
                                               child: Container(
                                                 margin: EdgeInsets.only(left: responsive.wp(2), top: responsive.hp(4), right: responsive.wp(2)),
@@ -639,338 +642,5 @@ class PedidosDetallePage extends StatelessWidget {
             }),
       ),
     );
-  }
-
-  void modalAgregarPedido(BuildContext context, ProductosModel producto) {
-    final _changeData = ChangeData();
-    ValueNotifier<bool> _cargando = ValueNotifier(false);
-    TextEditingController observacionController = TextEditingController();
-    showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      builder: (BuildContext context) {
-        final responsive = Responsive.of(context);
-
-        return ValueListenableBuilder(
-            valueListenable: _cargando,
-            builder: (BuildContext context, bool data, Widget child) {
-              return GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: SingleChildScrollView(
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                        margin: EdgeInsets.only(top: responsive.hp(5)),
-                        decoration: BoxDecoration(
-                          color: ColorsApp.black,
-                          borderRadius: BorderRadiusDirectional.only(
-                            topEnd: Radius.circular(20),
-                            topStart: Radius.circular(20),
-                          ),
-                        ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: responsive.hp(85),
-                              width: double.infinity,
-                              //decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: ColorsApp.mostaza),
-                              child: Column(
-                                children: [
-                                  Spacer(),
-                                  InkWell(
-                                    onTap: () async {
-                                      _cargando.value = true;
-                                      if (_changeData.cantidad > 0) {
-                                        if (hayPedido == 0) {
-                                          PedidoMesaTemporalModel pedidoTemporal = PedidoMesaTemporalModel();
-                                          pedidoTemporal.idMesa = this.mesa.idMesa;
-                                          pedidoTemporal.idProducto = producto.idProducto;
-                                          pedidoTemporal.nombre = producto.productoNombre;
-                                          pedidoTemporal.foto = producto.productoFoto;
-                                          pedidoTemporal.precio = producto.productoPrecioVenta;
-                                          pedidoTemporal.cantidad = _changeData.cantidad.toString();
-                                          pedidoTemporal.observacion = observacionController.text;
-                                          pedidoTemporal.total = _changeData.precio.toStringAsFixed(2);
-
-                                          final pedidoTemporalDatabase = PedidosTemporalDatabase();
-                                          print('Guardando en DATABASE');
-                                          await pedidoTemporalDatabase.insertarPedidoTemporalMesa(pedidoTemporal);
-                                          final pedidosBloc = ProviderBloc.pedidos(context);
-                                          pedidosBloc.obtenerPedidosTemporalesPorMesa(this.mesa.idMesa);
-                                          Navigator.pop(context);
-                                        } else {
-                                          DetallePedidoMesaModel pedido = DetallePedidoMesaModel();
-
-                                          pedido.idPedido = idComanda;
-                                          pedido.idProducto = producto.idProducto;
-                                          pedido.precio = producto.productoPrecioVenta;
-                                          pedido.cantidad = _changeData.cantidad.toString();
-                                          pedido.despacho = 'Salón';
-                                          pedido.total = _changeData.precio.toString();
-                                          pedido.observacion = observacionController.text;
-                                          final pedidoApi = PedidosMesaApi();
-                                          final res = await pedidoApi.agregarProductoAPedido(pedido);
-                                          if (res) {
-                                            final pedidosBloc = ProviderBloc.pedidos(context);
-                                            pedidosBloc.obtenerPedidosPorMesa(this.mesa.idMesa);
-                                            showToast2('Producto agregado a la orden', ColorsApp.greenGrey);
-                                            Navigator.pop(context);
-                                          } else {
-                                            showToast2('Ocurrió un error, inténtelo nuevamente', ColorsApp.redOrange);
-                                          }
-                                        }
-                                      } else {
-                                        showToast2('Debe indicar la cantidad a ordenar', ColorsApp.orange);
-                                      }
-                                      _cargando.value = false;
-                                    },
-                                    child: Container(
-                                      margin: EdgeInsets.symmetric(vertical: responsive.hp(3), horizontal: responsive.wp(3)),
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Ordenar ahora',
-                                            style: TextStyle(fontSize: responsive.ip(2.2), color: Colors.white, fontWeight: FontWeight.bold),
-                                          ),
-                                          Icon(Icons.arrow_forward_ios, color: Colors.white.withOpacity(0.5), size: responsive.ip(2)),
-                                          Icon(Icons.arrow_forward_ios, color: Colors.white.withOpacity(0.8), size: responsive.ip(2.3)),
-                                          Icon(Icons.arrow_forward_ios, color: Colors.white, size: responsive.ip(2.5))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: responsive.hp(75),
-                              width: double.infinity,
-                              //margin: EdgeInsets.symmetric(vertical: responsive.hp(1), horizontal: responsive.wp(3)),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                      bottomLeft: Radius.circular(40),
-                                      bottomRight: Radius.circular(40)),
-                                  color: ColorsApp.mostaza),
-                              child: Column(
-                                children: [
-                                  Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: responsive.wp(6),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          'Observación',
-                                          style: TextStyle(color: ColorsApp.black, fontSize: responsive.ip(2), fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: responsive.hp(.5),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: responsive.wp(8),
-                                    ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.white,
-                                      ),
-                                      child: TextField(
-                                        cursorColor: Colors.transparent,
-                                        keyboardType: TextInputType.text,
-                                        maxLines: 3,
-                                        decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.symmetric(
-                                              vertical: responsive.hp(1),
-                                              horizontal: responsive.wp(4),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderSide: BorderSide(color: Colors.black26),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(15),
-                                              ),
-                                            ),
-                                            hintStyle: TextStyle(color: Colors.black45),
-                                            hintText: 'Observación'),
-                                        enableInteractiveSelection: false,
-                                        controller: observacionController,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: responsive.hp(4),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: responsive.hp(55),
-                              width: double.infinity,
-                              //margin: EdgeInsets.symmetric(vertical: responsive.hp(1), horizontal: responsive.wp(3)),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                      bottomLeft: Radius.circular(40),
-                                      bottomRight: Radius.circular(40)),
-                                  color: Colors.white),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: responsive.hp(1), horizontal: responsive.wp(3)),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        icon: Icon(Icons.arrow_back_ios)),
-                                    Center(
-                                      child: Container(
-                                        height: responsive.hp(25),
-                                        width: responsive.wp(50),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(20),
-                                          child: CachedNetworkImage(
-                                            placeholder: (context, url) => Container(
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              child: Image(image: AssetImage('assets/img/loading.gif'), fit: BoxFit.cover),
-                                            ),
-                                            errorWidget: (context, url, error) => Container(
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              child: Image(image: AssetImage('assets/img/food.jpg'), fit: BoxFit.cover),
-                                            ),
-                                            imageUrl: '${producto.productoFoto}',
-                                            imageBuilder: (context, imageProvider) => Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: responsive.hp(2),
-                                    ),
-                                    Text(
-                                      '${producto.productoNombre}',
-                                      style: TextStyle(fontSize: responsive.ip(2.6), color: ColorsApp.black, fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: responsive.hp(1),
-                                    ),
-                                    Text(
-                                      'S/ ${producto.productoPrecioVenta}',
-                                      style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.grey),
-                                    ),
-                                    SizedBox(
-                                      height: responsive.hp(2),
-                                    ),
-                                    AnimatedBuilder(
-                                        animation: _changeData,
-                                        builder: (context, _) {
-                                          return Row(
-                                            children: [
-                                              Text(
-                                                'S/${_changeData.precio.toStringAsFixed(2)}',
-                                                style: TextStyle(fontSize: responsive.ip(3), color: ColorsApp.black, fontWeight: FontWeight.bold),
-                                              ),
-                                              SizedBox(
-                                                width: responsive.wp(2),
-                                              ),
-                                              Text(
-                                                'Total',
-                                                style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.grey),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                height: responsive.hp(5),
-                                                width: responsive.wp(35),
-                                                decoration: BoxDecoration(boxShadow: [
-                                                  BoxShadow(
-                                                    color: ColorsApp.grey.withOpacity(0.5),
-                                                    spreadRadius: 1,
-                                                    blurRadius: 5,
-                                                    offset: Offset(2, 2),
-                                                  )
-                                                ], borderRadius: BorderRadius.circular(20), color: Colors.white),
-                                                child: Row(
-                                                  children: [
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          _changeData.actualizarDatos(-1, double.parse(producto.productoPrecioVenta));
-                                                        },
-                                                        icon: Icon(Icons.horizontal_rule)),
-                                                    Spacer(),
-                                                    Text(
-                                                      '${_changeData.cantidad}',
-                                                      style:
-                                                          TextStyle(fontSize: responsive.ip(3), color: ColorsApp.black, fontWeight: FontWeight.bold),
-                                                    ),
-                                                    Spacer(),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          _changeData.actualizarDatos(1, double.parse(producto.productoPrecioVenta));
-                                                        },
-                                                        icon: Icon(Icons.add))
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          );
-                                        })
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      (data)
-                          ? Center(
-                              child: (Platform.isAndroid) ? CircularProgressIndicator() : CupertinoActivityIndicator(),
-                            )
-                          : Container()
-                    ],
-                  ),
-                ),
-              );
-            });
-      },
-    );
-  }
-}
-
-class ChangeData extends ChangeNotifier {
-  int cantidad = 0;
-  double precio = 0;
-  void actualizarDatos(int val, double price) {
-    cantidad = cantidad + val;
-    precio = cantidad * price;
-
-    if (cantidad <= 0) {
-      cantidad = 0;
-      precio = 0;
-    }
-
-    notifyListeners();
   }
 }

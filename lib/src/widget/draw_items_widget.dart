@@ -12,6 +12,8 @@ class DrawerItems {
   static const mesas = DrawerItem(icon: Icons.dinner_dining, titulo: 'Mesas');
   static const ventas = DrawerItem(icon: Icons.money, titulo: 'Ventas');
   static const reportes = DrawerItem(icon: Icons.report, titulo: 'Reportes');
+  static const info = DrawerItem(icon: Icons.person, titulo: 'Info');
+  static const logout = DrawerItem(icon: Icons.logout, titulo: 'Cerrar Sesión');
 
-  static final List<DrawerItem> menu = [pedidos, productos, mesas, ventas, reportes];
+  static final List<DrawerItem> menu = [pedidos, productos, mesas, ventas, reportes, info, logout];
 }

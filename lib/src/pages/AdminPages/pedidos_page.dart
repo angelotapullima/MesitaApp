@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:messita_app/src/bloc/provider_bloc.dart';
 import 'package:messita_app/src/model/mesas_negocio_model.dart';
-import 'package:messita_app/src/pages/AdminPages/Pedidos/pedido_detalle_page.dart';
 import 'package:messita_app/src/theme/theme.dart';
 import 'package:messita_app/src/utils/responsive.dart';
 import 'package:messita_app/src/utils/utils.dart';
 import 'package:messita_app/src/widget/drawer_menu_widget.dart';
+import 'package:messita_app/src/widget/widgets.dart';
 
 class PedidosPage extends StatelessWidget {
   final VoidCallback openDrawer;
@@ -18,9 +18,9 @@ class PedidosPage extends StatelessWidget {
     final mesasBloc = ProviderBloc.mesas(context);
     mesasBloc.obtenerMesasPedidos();
     return Scaffold(
-      backgroundColor: ColorsApp.depOrange,
+      backgroundColor: ColorsApp.greenGrey,
       appBar: AppBar(
-        backgroundColor: ColorsApp.depOrange,
+        backgroundColor: ColorsApp.greenGrey,
         actions: [
           // Padding(
           //   padding: EdgeInsets.only(right: responsive.wp(1), top: responsive.hp(1)),
@@ -75,7 +75,7 @@ class PedidosPage extends StatelessWidget {
                           ),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (BuildContext context, int index) {
-                            return _mesaItem(context, responsive, mesas.data[index]);
+                            return mesaItem(context, responsive, mesas.data[index]);
                           },
                         ),
                       ),
@@ -92,103 +92,6 @@ class PedidosPage extends StatelessWidget {
             return mostrarAlert();
           }
         },
-      ),
-    );
-  }
-
-  Widget _mesaItem(BuildContext context, Responsive responsive, MesasNegocioModel mesa) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            opaque: false,
-            transitionDuration: const Duration(milliseconds: 400),
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return PedidosDetallePage(
-                mesa: mesa,
-              );
-            },
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-          ),
-        );
-      },
-      child: Padding(
-        padding: EdgeInsets.all(5),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 40,
-              left: 3,
-              child: Container(
-                height: responsive.hp(23),
-                width: responsive.wp(40),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorsApp.grey.withOpacity(0.2),
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      offset: Offset(1, 2.5),
-                    )
-                  ],
-                  color: (mesa.mesaEstadoAtencion == '1') ? ColorsApp.redOrange : ColorsApp.greenLemon,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: responsive.hp(3),
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: responsive.wp(4),
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              'Cap',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              '${mesa.mesaCapacidad}',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: responsive.hp(3)),
-                      child: Text(
-                        '${mesa.mesaNombre}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-                top: 1,
-                right: -1,
-                child: Container(
-                  //height: responsive.hp(30),
-                  width: responsive.wp(30),
-                  child: (mesa.idMesa == '0') ? Image.asset('assets/img/delivery.png') : Image.asset('assets/img/mesa_madera.png'),
-                )),
-          ],
-        ),
       ),
     );
   }

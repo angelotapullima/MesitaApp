@@ -98,31 +98,6 @@ class DrawerAdmin extends StatelessWidget {
                         ))
                     .toList(),
               ),
-              SizedBox(
-                height: responsive.hp(30),
-              ),
-              InkWell(
-                onTap: () {
-                  preferences.clearPreferences();
-                  Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.logout_outlined,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: responsive.wp(1),
-                    ),
-                    Text('Cerrar Sesión',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: responsive.ip(2),
-                        ))
-                  ],
-                ),
-              )
             ],
           ),
         ),
