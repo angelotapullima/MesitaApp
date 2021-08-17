@@ -129,7 +129,6 @@ class PedidosDetallePage extends StatelessWidget {
                                           children: [
                                             InkWell(
                                               onTap: () {
-                                                print('valor hay pedido $hayPedido');
                                                 _query.text = '';
                                                 busquedaBloc.obtenerProductosPorQuery(_query.text);
                                                 FocusManager.instance.primaryFocus?.unfocus();

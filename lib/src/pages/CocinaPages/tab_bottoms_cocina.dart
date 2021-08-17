@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:messita_app/src/bloc/provider_bloc.dart';
-import 'package:messita_app/src/pages/CocinaPages/cocina_pages.dart';
+import 'package:messita_app/src/pages/CocinaPages/cocina_page.dart';
 import 'package:messita_app/src/pages/InfoUser/info_user.page.dart';
 import 'package:messita_app/src/theme/theme.dart';
 import 'package:messita_app/src/utils/responsive.dart';
@@ -46,7 +46,7 @@ class _HomePageCocinaState extends State<HomePageCocina> {
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
                   decoration: BoxDecoration(
-                    color: ColorsApp.white,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                     // borderRadius: BorderRadiusDirectional.only(
                     //   topStart: Radius.circular(20),
