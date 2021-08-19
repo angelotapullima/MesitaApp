@@ -93,6 +93,35 @@ class PedidosMesaApi {
     }
   }
 
+  Future<bool> eliminarProductoAPedido(String password, String idPedidoDetalle, String idPedido, String idMesa) async {
+    try {
+      final url = Uri.parse('$apiBaseURL/api/Pedido/eliminar_comanda_detalle');
+
+      print('$password, $idMesa, $idPedido, $idPedidoDetalle');
+
+      final resp = await http.post(url, body: {
+        'tn': '${preferences.token}',
+        'password': '$password',
+        'id_mesa': '$idMesa',
+        'id_comanda': '$idPedido',
+        'id_comanda_detalle': '$idPedidoDetalle',
+        'app': 'true',
+      });
+
+      final decodedData = json.decode(resp.body);
+      print(decodedData);
+
+      if (decodedData['result']['code'] == 1) {
+        await pedidosDatabase.deleteDetallePedidoXIdDetalle(idPedidoDetalle);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> generarNuevoPedido(String idMesa, String personas) async {
     try {
       final url = Uri.parse('$apiBaseURL/api/Pedido/guardar_comanda');

@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:messita_app/src/api/pedidos_mesa_api.dart';
 import 'package:messita_app/src/bloc/provider_bloc.dart';
 import 'package:messita_app/src/model/mesas_negocio_model.dart';
 import 'package:messita_app/src/model/pedidos_mesa_model.dart';
 import 'package:messita_app/src/model/pedidos_mesa_temporal_model.dart';
 import 'package:messita_app/src/model/productos_model.dart';
+import 'package:messita_app/src/pages/AdminPages/Pedidos/eliminar_detalle_pedido.dart';
 import 'package:messita_app/src/pages/AdminPages/Productos/mostrar_foto_producto_page.dart';
 import 'package:messita_app/src/prefences/preferences.dart';
 import 'package:messita_app/src/theme/theme.dart';
@@ -311,104 +314,180 @@ class PedidosDetallePage extends StatelessWidget {
                                                       );
                                                     }
                                                     index = index - 1;
-                                                    return Container(
-                                                      margin: EdgeInsets.symmetric(vertical: responsive.hp(1), horizontal: responsive.wp(1)),
-                                                      height: responsive.hp(10),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(30),
-                                                        color: Colors.white,
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            color: ColorsApp.grey.withOpacity(0.5),
-                                                            spreadRadius: 1,
-                                                            blurRadius: 10,
-                                                            offset: Offset(2, 2),
-                                                          )
-                                                        ],
-                                                      ),
-                                                      child: Padding(
-                                                        padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
-                                                        child: Row(
+                                                    return FocusedMenuHolder(
+                                                      openWithTap: true,
+                                                      onPressed: () {},
+                                                      menuItems: [
+                                                        FocusedMenuItem(
+                                                            backgroundColor: Colors.redAccent,
+                                                            title: Expanded(
+                                                              child: Text(
+                                                                "Eliminar",
+                                                                style: TextStyle(color: Colors.white),
+                                                              ),
+                                                            ),
+                                                            trailingIcon: Icon(
+                                                              Icons.delete,
+                                                              color: Colors.white,
+                                                            ),
+                                                            onPressed: () async {
+                                                              _cargando.value = true;
+                                                              Navigator.push(
+                                                                  context,
+                                                                  PageRouteBuilder(
+                                                                    opaque: false,
+                                                                    transitionDuration: const Duration(milliseconds: 400),
+                                                                    pageBuilder: (context, animation, secondaryAnimation) {
+                                                                      return ConfirmarEliminarDetallePedido(
+                                                                        idMesa: this.mesa.idMesa,
+                                                                        idPedido: snapshot.data[0].idPedido,
+                                                                        idDetallePedido: snapshot.data[0].detalle[index].idDetallePedido,
+                                                                      );
+                                                                    },
+                                                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                                                      return FadeTransition(
+                                                                        opacity: animation,
+                                                                        child: child,
+                                                                      );
+                                                                    },
+                                                                  ));
+
+                                                              _cargando.value = false;
+                                                            })
+                                                      ],
+                                                      child: Container(
+                                                        height: responsive.hp(15),
+                                                        child: Stack(
                                                           children: [
-                                                            Container(
-                                                              width: responsive.ip(5),
-                                                              height: responsive.ip(5),
-                                                              child: ClipRRect(
-                                                                borderRadius: BorderRadius.circular(100),
-                                                                child: CachedNetworkImage(
-                                                                  placeholder: (context, url) => Container(
-                                                                    width: double.infinity,
-                                                                    height: double.infinity,
-                                                                    child: Image(image: AssetImage('assets/img/loading.gif'), fit: BoxFit.cover),
-                                                                  ),
-                                                                  errorWidget: (context, url, error) => Container(
-                                                                    width: double.infinity,
-                                                                    height: double.infinity,
-                                                                    child: Center(
-                                                                      child: Icon(
-                                                                        Icons.error,
+                                                            Positioned(
+                                                              top: responsive.hp(2),
+                                                              bottom: 0,
+                                                              left: 0,
+                                                              right: 0,
+                                                              child: Container(
+                                                                margin:
+                                                                    EdgeInsets.symmetric(vertical: responsive.hp(1), horizontal: responsive.wp(1)),
+                                                                height: responsive.hp(10),
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(30),
+                                                                  color: Colors.white,
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                      color: ColorsApp.grey.withOpacity(0.5),
+                                                                      spreadRadius: 1,
+                                                                      blurRadius: 10,
+                                                                      offset: Offset(2, 2),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.symmetric(horizontal: responsive.wp(2)),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Container(
+                                                                        width: responsive.ip(5),
+                                                                        height: responsive.ip(5),
+                                                                        child: ClipRRect(
+                                                                          borderRadius: BorderRadius.circular(100),
+                                                                          child: CachedNetworkImage(
+                                                                            placeholder: (context, url) => Container(
+                                                                              width: double.infinity,
+                                                                              height: double.infinity,
+                                                                              child: Image(
+                                                                                  image: AssetImage('assets/img/loading.gif'), fit: BoxFit.cover),
+                                                                            ),
+                                                                            errorWidget: (context, url, error) => Container(
+                                                                              width: double.infinity,
+                                                                              height: double.infinity,
+                                                                              child: Center(
+                                                                                child: Icon(
+                                                                                  Icons.error,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            imageUrl: '${snapshot.data[0].detalle[index].foto}',
+                                                                            imageBuilder: (context, imageProvider) => Container(
+                                                                              decoration: BoxDecoration(
+                                                                                shape: BoxShape.circle,
+                                                                                image: DecorationImage(
+                                                                                  image: imageProvider,
+                                                                                  fit: BoxFit.cover,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  ),
-                                                                  imageUrl: '${snapshot.data[0].detalle[index].foto}',
-                                                                  imageBuilder: (context, imageProvider) => Container(
-                                                                    decoration: BoxDecoration(
-                                                                      shape: BoxShape.circle,
-                                                                      image: DecorationImage(
-                                                                        image: imageProvider,
-                                                                        fit: BoxFit.cover,
+                                                                      SizedBox(width: responsive.wp(2)),
+                                                                      Center(
+                                                                        child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Text(
+                                                                              '${snapshot.data[0].detalle[index].nombre}',
+                                                                              style: TextStyle(
+                                                                                  fontSize: responsive.ip(2.2),
+                                                                                  color: ColorsApp.greenGrey,
+                                                                                  fontWeight: FontWeight.bold),
+                                                                            ),
+                                                                            (snapshot.data[0].detalle[index].observacion != '')
+                                                                                ? Text(
+                                                                                    '${snapshot.data[0].detalle[index].observacion}',
+                                                                                    textAlign: TextAlign.left,
+                                                                                  )
+                                                                                : Container(),
+                                                                          ],
+                                                                        ),
                                                                       ),
-                                                                    ),
+                                                                      Spacer(),
+                                                                      Center(
+                                                                        child: Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              '${snapshot.data[0].detalle[index].cantidad} ',
+                                                                              style: TextStyle(
+                                                                                  fontSize: responsive.ip(2.2),
+                                                                                  color: ColorsApp.black,
+                                                                                  fontWeight: FontWeight.bold),
+                                                                            ),
+                                                                            Text(
+                                                                              'x',
+                                                                              style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.black),
+                                                                            ),
+                                                                            Text(
+                                                                              ' S/${snapshot.data[0].detalle[index].total}',
+                                                                              style: TextStyle(
+                                                                                  fontSize: responsive.ip(2.2),
+                                                                                  color: ColorsApp.black,
+                                                                                  fontWeight: FontWeight.bold),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ),
                                                               ),
                                                             ),
-                                                            SizedBox(width: responsive.wp(2)),
-                                                            Center(
-                                                              child: Column(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  Text(
-                                                                    '${snapshot.data[0].detalle[index].nombre}',
-                                                                    style: TextStyle(
-                                                                        fontSize: responsive.ip(2.2),
-                                                                        color: ColorsApp.greenGrey,
-                                                                        fontWeight: FontWeight.bold),
+                                                            Positioned(
+                                                                top: responsive.hp(0.5),
+                                                                right: 0,
+                                                                child: Container(
+                                                                  margin: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                                                                  decoration: BoxDecoration(
+                                                                      borderRadius: BorderRadius.circular(20), color: ColorsApp.orangeLight),
+                                                                  child: Padding(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal: responsive.wp(3), vertical: responsive.hp(1)),
+                                                                    child: Text(
+                                                                      'En preparación',
+                                                                      style: TextStyle(
+                                                                          fontSize: responsive.ip(2),
+                                                                          color: Colors.white,
+                                                                          fontWeight: FontWeight.bold),
+                                                                    ),
                                                                   ),
-                                                                  (snapshot.data[0].detalle[index].observacion != '')
-                                                                      ? Text(
-                                                                          '${snapshot.data[0].detalle[index].observacion}',
-                                                                          textAlign: TextAlign.left,
-                                                                        )
-                                                                      : Container(),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Spacer(),
-                                                            Center(
-                                                              child: Row(
-                                                                children: [
-                                                                  Text(
-                                                                    '${snapshot.data[0].detalle[index].cantidad} ',
-                                                                    style: TextStyle(
-                                                                        fontSize: responsive.ip(2.2),
-                                                                        color: ColorsApp.black,
-                                                                        fontWeight: FontWeight.bold),
-                                                                  ),
-                                                                  Text(
-                                                                    'x',
-                                                                    style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.black),
-                                                                  ),
-                                                                  Text(
-                                                                    ' S/${snapshot.data[0].detalle[index].total}',
-                                                                    style: TextStyle(
-                                                                        fontSize: responsive.ip(2.2),
-                                                                        color: ColorsApp.black,
-                                                                        fontWeight: FontWeight.bold),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
+                                                                )),
                                                           ],
                                                         ),
                                                       ),
