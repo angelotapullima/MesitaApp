@@ -66,8 +66,9 @@ Widget mesaItem(BuildContext context, Responsive responsive, MesasNegocioModel m
       child: Stack(
         children: [
           Positioned(
-            top: 40,
+            top: responsive.hp(2),
             left: 3,
+            bottom: responsive.hp(1),
             child: Container(
               height: responsive.hp(23),
               width: responsive.wp(40),
@@ -315,9 +316,9 @@ void modalAgregarPedido(BuildContext context, ProductosModel producto, int hayPe
                                             horizontal: responsive.wp(4),
                                           ),
                                           border: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.black26),
+                                            borderSide: BorderSide(color: Colors.transparent),
                                             borderRadius: BorderRadius.all(
-                                              Radius.circular(15),
+                                              Radius.circular(20),
                                             ),
                                           ),
                                           hintStyle: TextStyle(color: Colors.black45),

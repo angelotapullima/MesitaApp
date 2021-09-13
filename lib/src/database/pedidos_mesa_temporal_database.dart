@@ -23,6 +23,7 @@ class PedidosTemporalDatabase {
     final res = await db.rawQuery("SELECT * FROM PedidosMesaTemporal WHERE idMesa='$idMesa'");
 
     List<PedidoMesaTemporalModel> list = res.isNotEmpty ? res.map((c) => PedidoMesaTemporalModel.fromJson(c)).toList() : [];
+    print(list);
     return list;
   }
 

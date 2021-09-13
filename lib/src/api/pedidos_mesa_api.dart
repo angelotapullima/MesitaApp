@@ -95,11 +95,12 @@ class PedidosMesaApi {
 
   Future<bool> eliminarProductoAPedido(String password, String idPedidoDetalle, String idPedido, String idMesa) async {
     try {
-      final url = Uri.parse('$apiBaseURL/api/Pedido/eliminar_comanda_detalle');
+      final url = Uri.parse('$apiBaseURL/api/Pedido/eliminar_comanda_detalle_app');
 
       print('$password, $idMesa, $idPedido, $idPedidoDetalle');
 
       final resp = await http.post(url, body: {
+        'usuario_nickname': '${preferences.userNickname}',
         'tn': '${preferences.token}',
         'password': '$password',
         'id_mesa': '$idMesa',
@@ -109,7 +110,7 @@ class PedidosMesaApi {
       });
 
       final decodedData = json.decode(resp.body);
-      print(decodedData);
+      print('Respuesta ws $decodedData');
 
       if (decodedData['result']['code'] == 1) {
         await pedidosDatabase.deleteDetallePedidoXIdDetalle(idPedidoDetalle);
@@ -182,31 +183,36 @@ class PedidosMesaApi {
       pedido.estado = lisPedidosDatabase[i].estado;
 
       final List<DetallePedidoMesaModel> listDetalle = [];
+
       double precioTotal = 0;
       final listDetalleDatabase = await pedidosDatabase.obtenerDetallePedidoMesaPorIdPedido(lisPedidosDatabase[i].idPedido);
-      for (var x = 0; x < listDetalleDatabase.length; x++) {
-        DetallePedidoMesaModel detalle = DetallePedidoMesaModel();
-        detalle.idDetallePedido = listDetalleDatabase[x].idDetallePedido;
-        detalle.idPedido = listDetalleDatabase[x].idPedido;
-        detalle.idProducto = listDetalleDatabase[x].idProducto;
-        detalle.nombre = listDetalleDatabase[x].nombre;
-        detalle.foto = listDetalleDatabase[x].foto;
-        detalle.despacho = listDetalleDatabase[x].despacho;
-        detalle.observacion = listDetalleDatabase[x].observacion;
-        detalle.precio = listDetalleDatabase[x].precio;
-        detalle.cantidad = listDetalleDatabase[x].cantidad;
-        detalle.total = listDetalleDatabase[x].total;
-        detalle.fecha = listDetalleDatabase[x].fecha;
-        detalle.estado = listDetalleDatabase[x].estado;
+      if (listDetalleDatabase.length > 0) {
+        for (var x = 0; x < listDetalleDatabase.length; x++) {
+          DetallePedidoMesaModel detalle = DetallePedidoMesaModel();
+          detalle.idDetallePedido = listDetalleDatabase[x].idDetallePedido;
+          detalle.idPedido = listDetalleDatabase[x].idPedido;
+          detalle.idProducto = listDetalleDatabase[x].idProducto;
+          detalle.nombre = listDetalleDatabase[x].nombre;
+          detalle.foto = listDetalleDatabase[x].foto;
+          detalle.despacho = listDetalleDatabase[x].despacho;
+          detalle.observacion = listDetalleDatabase[x].observacion;
+          detalle.precio = listDetalleDatabase[x].precio;
+          detalle.cantidad = listDetalleDatabase[x].cantidad;
+          detalle.total = listDetalleDatabase[x].total;
+          detalle.fecha = listDetalleDatabase[x].fecha;
+          detalle.estado = listDetalleDatabase[x].estado;
 
-        precioTotal = precioTotal + double.parse(listDetalleDatabase[x].total);
+          precioTotal = precioTotal + double.parse(listDetalleDatabase[x].total);
 
-        listDetalle.add(detalle);
+          listDetalle.add(detalle);
+        }
+        pedido.total = precioTotal.toStringAsFixed(2);
+        pedido.detalle = listDetalle;
+
+        listaGeneral.add(pedido);
+      } else {
+        await pedidosDatabase.deletePedidosMesaXID(lisPedidosDatabase[i].idPedido);
       }
-      pedido.total = precioTotal.toStringAsFixed(2);
-      pedido.detalle = listDetalle;
-
-      listaGeneral.add(pedido);
     }
 
     return listaGeneral;

@@ -180,9 +180,7 @@ class PedidosCajaDetallePage extends StatelessWidget {
                                                           Text(
                                                             '${snapshot.data[0].detalle[index].nombre}',
                                                             style: TextStyle(
-                                                                fontSize: responsive.ip(2.2),
-                                                                color: ColorsApp.greenGrey,
-                                                                fontWeight: FontWeight.bold),
+                                                                fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
                                                           ),
                                                           (snapshot.data[0].detalle[index].observacion != '')
                                                               ? Text(
@@ -200,7 +198,7 @@ class PedidosCajaDetallePage extends StatelessWidget {
                                                           Text(
                                                             '${snapshot.data[0].detalle[index].cantidad} ',
                                                             style: TextStyle(
-                                                                fontSize: responsive.ip(2.2), color: ColorsApp.black, fontWeight: FontWeight.bold),
+                                                                fontSize: responsive.ip(2), color: ColorsApp.black, fontWeight: FontWeight.bold),
                                                           ),
                                                           Text(
                                                             'x',
@@ -209,7 +207,7 @@ class PedidosCajaDetallePage extends StatelessWidget {
                                                           Text(
                                                             ' S/${snapshot.data[0].detalle[index].total}',
                                                             style: TextStyle(
-                                                                fontSize: responsive.ip(2.2), color: ColorsApp.black, fontWeight: FontWeight.bold),
+                                                                fontSize: responsive.ip(2), color: ColorsApp.black, fontWeight: FontWeight.bold),
                                                           ),
                                                         ],
                                                       ),

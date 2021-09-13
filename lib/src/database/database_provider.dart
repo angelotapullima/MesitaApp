@@ -84,6 +84,32 @@ class DatabaseProvider {
           ' observacion TEXT,'
           ' total TEXT'
           ')');
+
+      await db.execute(' CREATE TABLE PedidosCocina('
+          ' idDetallePedido TEXT PRIMARY KEY,'
+          ' idPedido TEXT,'
+          ' idMesa TEXT,'
+          ' mesaNombre TEXT,'
+          ' idGrupo TEXT,'
+          ' grupoNombre TEXT,'
+          ' numeroPedido TEXT,'
+          ' delivery TEXT,'
+          ' telefono TEXT,'
+          ' totalPedido TEXT,'
+          ' numeroPersonas TEXT,'
+          ' estadoPedido TEXT,'
+          ' idProducto TEXT,'
+          ' nombre TEXT,'
+          ' foto TEXT,'
+          ' despacho TEXT,'
+          ' observacion TEXT,'
+          ' precioProducto TEXT,'
+          ' cantidad TEXT,'
+          ' fecha TEXT,'
+          ' fechaEntrega TEXT,'
+          ' estadoVenta TEXT,'
+          ' estado TEXT'
+          ')');
     });
   }
 }

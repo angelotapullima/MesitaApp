@@ -109,8 +109,7 @@ class CocinaPage extends StatelessWidget {
                                             children: [
                                               Text(
                                                 'Bisteck al carbón',
-                                                style:
-                                                    TextStyle(fontSize: responsive.ip(2.2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
+                                                style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
                                               ),
                                               Text(
                                                 'Observaciones para poder especificar el tamaño que tendrá este campo en caso haya observaciones',
@@ -126,7 +125,7 @@ class CocinaPage extends StatelessWidget {
                                           children: [
                                             Text(
                                               '3',
-                                              style: TextStyle(fontSize: responsive.ip(2.2), color: ColorsApp.black, fontWeight: FontWeight.bold),
+                                              style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.black, fontWeight: FontWeight.bold),
                                             ),
                                             Text(
                                               'x',
@@ -134,7 +133,7 @@ class CocinaPage extends StatelessWidget {
                                             ),
                                             Text(
                                               ' S/23.00',
-                                              style: TextStyle(fontSize: responsive.ip(2.2), color: ColorsApp.black, fontWeight: FontWeight.bold),
+                                              style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.black, fontWeight: FontWeight.bold),
                                             ),
                                           ],
                                         ),

@@ -165,8 +165,8 @@ class ProductosMozoPage extends StatelessWidget {
                                               left: responsive.wp(5),
                                               bottom: responsive.hp(2),
                                               child: Container(
-                                                width: responsive.ip(15),
-                                                height: responsive.ip(15),
+                                                width: responsive.ip(13),
+                                                height: responsive.ip(13),
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(100),
                                                   boxShadow: [

@@ -213,8 +213,8 @@ class ProductosPage extends StatelessWidget {
                                               );
                                             },
                                             child: Container(
-                                              width: responsive.ip(15),
-                                              height: responsive.ip(15),
+                                              width: responsive.ip(13),
+                                              height: responsive.ip(13),
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(100),
                                                 boxShadow: [
@@ -263,7 +263,7 @@ class ProductosPage extends StatelessWidget {
                 );
               } else {
                 return Center(
-                  child: Text('Sin Mesas agregadas'),
+                  child: Text('Sin productos agregados'),
                 );
               }
             } else {

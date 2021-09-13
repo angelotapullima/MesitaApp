@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:messita_app/src/bloc/login_bloc.dart';
 import 'package:messita_app/src/bloc/mesas_negocio_bloc.dart';
 import 'package:messita_app/src/bloc/navegacion_bottom_bloc.dart';
+import 'package:messita_app/src/bloc/pedidos_cocina_bloc.dart';
 import 'package:messita_app/src/bloc/pedidos_mesa_bloc.dart';
 import 'package:messita_app/src/bloc/productos_bloc.dart';
 
@@ -21,6 +22,7 @@ class ProviderBloc extends InheritedWidget {
   final mesasBloc = MesasNegocioBloc();
   final productosBloc = ProductosBloc();
   final pedidosBloc = PedidosMesaBloc();
+  final pedidosCocinaBloc = PedidosCocinaBloc();
 
   ProviderBloc._internal({Key key, Widget child}) : super(key: key, child: child);
 
@@ -45,5 +47,9 @@ class ProviderBloc extends InheritedWidget {
 
   static PedidosMesaBloc pedidos(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).pedidosBloc;
+  }
+
+  static PedidosCocinaBloc pedidosCocina(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).pedidosCocinaBloc;
   }
 }

@@ -19,33 +19,38 @@ import 'package:messita_app/src/utils/responsive.dart';
 import 'package:messita_app/src/utils/utils.dart';
 import 'package:messita_app/src/widget/widgets.dart';
 
-class PedidosDetallePage extends StatelessWidget {
+class PedidosDetallePage extends StatefulWidget {
   final MesasNegocioModel mesa;
   PedidosDetallePage({Key key, @required this.mesa}) : super(key: key);
 
-  static int cargaInicial = 0;
-  static int hayPedido = 0;
-  static String idComanda = '';
-  static String nOrden = '';
-  static ValueNotifier<bool> _cargando = ValueNotifier(false);
-  static TextEditingController _query = TextEditingController();
+  @override
+  _PedidosDetallePageState createState() => _PedidosDetallePageState();
+}
 
+class _PedidosDetallePageState extends State<PedidosDetallePage> {
+  int cargaInicial = 0;
+  int hayPedido = 0;
+  String idComanda = '';
+  String nOrden = '';
+  ValueNotifier<bool> _cargando = ValueNotifier(false);
+  TextEditingController _query = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final prefences = Preferences();
     final responsive = Responsive.of(context);
     final busquedaBloc = ProviderBloc.productos(context);
     final pedidosBloc = ProviderBloc.pedidos(context);
-    pedidosBloc.obtenerPedidosPorMesa(this.mesa.idMesa);
-    pedidosBloc.obtenerPedidosTemporalesPorMesa(this.mesa.idMesa);
+    pedidosBloc.obtenerPedidosPorMesa(widget.mesa.idMesa);
+    pedidosBloc.obtenerPedidosTemporalesPorMesa(widget.mesa.idMesa);
     if (cargaInicial == 0) {
       busquedaBloc.obtenerProductosPorQuery('');
+      print('Inico busqueda query');
       cargaInicial++;
     }
     return Scaffold(
-      backgroundColor: (mesa.mesaEstadoAtencion == '1') ? ColorsApp.redOrange : ColorsApp.greenLemon,
+      backgroundColor: (widget.mesa.mesaEstadoAtencion == '1') ? ColorsApp.redOrange : ColorsApp.greenLemon,
       appBar: AppBar(
-        backgroundColor: (mesa.mesaEstadoAtencion == '1') ? ColorsApp.redOrange : ColorsApp.greenLemon,
+        backgroundColor: (widget.mesa.mesaEstadoAtencion == '1') ? ColorsApp.redOrange : ColorsApp.greenLemon,
         actions: [],
         elevation: 0,
       ),
@@ -78,11 +83,11 @@ class PedidosDetallePage extends StatelessWidget {
                                   style: TextStyle(letterSpacing: 1.5, fontSize: responsive.ip(3), color: Colors.white, fontWeight: FontWeight.w600),
                                 ),
                                 Text(
-                                  '${this.mesa.mesaNombre}',
+                                  '${widget.mesa.mesaNombre}',
                                   style: TextStyle(fontSize: responsive.ip(5), color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  'Capacidad: ${mesa.mesaCapacidad}',
+                                  'Capacidad: ${widget.mesa.mesaCapacidad}',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(fontSize: responsive.ip(2), color: ColorsApp.greenGrey, fontWeight: FontWeight.bold),
                                 ),
@@ -92,7 +97,7 @@ class PedidosDetallePage extends StatelessWidget {
                             Container(
                               height: responsive.hp(15),
                               width: responsive.wp(25),
-                              child: (mesa.idMesa == '0') ? Image.asset('assets/img/delivery.png') : Image.asset('assets/img/mesa_madera.png'),
+                              child: (widget.mesa.idMesa == '0') ? Image.asset('assets/img/delivery.png') : Image.asset('assets/img/mesa_madera.png'),
                             )
                           ],
                         ),
@@ -108,8 +113,9 @@ class PedidosDetallePage extends StatelessWidget {
                                   if (value != '') {
                                     busquedaBloc.obtenerProductosPorQuery(value);
                                   } else {
+                                    print('No debe mostrar nada');
                                     _query.text = '';
-                                    busquedaBloc.obtenerProductosPorQuery(_query.text);
+                                    busquedaBloc.obtenerProductosPorQuery('');
                                   }
                                 },
                                 borderRadius: BorderRadius.circular(20),
@@ -133,13 +139,14 @@ class PedidosDetallePage extends StatelessWidget {
                                             InkWell(
                                               onTap: () {
                                                 _query.text = '';
-                                                busquedaBloc.obtenerProductosPorQuery(_query.text);
+                                                print('Pedir el producto');
+                                                busquedaBloc.obtenerProductosPorQuery('');
                                                 FocusManager.instance.primaryFocus?.unfocus();
 
-                                                modalAgregarPedido(context, snapshot.data[index], hayPedido, idComanda, this.mesa.idMesa);
+                                                modalAgregarPedido(context, snapshot.data[index], hayPedido, idComanda, widget.mesa.idMesa);
                                               },
                                               child: Container(
-                                                margin: EdgeInsets.only(left: responsive.wp(2), top: responsive.hp(4), right: responsive.wp(2)),
+                                                margin: EdgeInsets.only(left: responsive.wp(3), top: responsive.hp(4), right: responsive.wp(3)),
                                                 height: responsive.hp(18),
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(20),
@@ -226,8 +233,8 @@ class PedidosDetallePage extends StatelessWidget {
                                                   );
                                                 },
                                                 child: Container(
-                                                  width: responsive.ip(15),
-                                                  height: responsive.ip(15),
+                                                  width: responsive.ip(13),
+                                                  height: responsive.ip(13),
                                                   decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(100),
                                                     boxShadow: [
@@ -339,7 +346,7 @@ class PedidosDetallePage extends StatelessWidget {
                                                                     transitionDuration: const Duration(milliseconds: 400),
                                                                     pageBuilder: (context, animation, secondaryAnimation) {
                                                                       return ConfirmarEliminarDetallePedido(
-                                                                        idMesa: this.mesa.idMesa,
+                                                                        idMesa: this.widget.mesa.idMesa,
                                                                         idPedido: snapshot.data[0].idPedido,
                                                                         idDetallePedido: snapshot.data[0].detalle[index].idDetallePedido,
                                                                       );
@@ -426,7 +433,7 @@ class PedidosDetallePage extends StatelessWidget {
                                                                             Text(
                                                                               '${snapshot.data[0].detalle[index].nombre}',
                                                                               style: TextStyle(
-                                                                                  fontSize: responsive.ip(2.2),
+                                                                                  fontSize: responsive.ip(2),
                                                                                   color: ColorsApp.greenGrey,
                                                                                   fontWeight: FontWeight.bold),
                                                                             ),
@@ -446,7 +453,7 @@ class PedidosDetallePage extends StatelessWidget {
                                                                             Text(
                                                                               '${snapshot.data[0].detalle[index].cantidad} ',
                                                                               style: TextStyle(
-                                                                                  fontSize: responsive.ip(2.2),
+                                                                                  fontSize: responsive.ip(2),
                                                                                   color: ColorsApp.black,
                                                                                   fontWeight: FontWeight.bold),
                                                                             ),
@@ -457,7 +464,7 @@ class PedidosDetallePage extends StatelessWidget {
                                                                             Text(
                                                                               ' S/${snapshot.data[0].detalle[index].total}',
                                                                               style: TextStyle(
-                                                                                  fontSize: responsive.ip(2.2),
+                                                                                  fontSize: responsive.ip(2),
                                                                                   color: ColorsApp.black,
                                                                                   fontWeight: FontWeight.bold),
                                                                             ),
@@ -482,7 +489,7 @@ class PedidosDetallePage extends StatelessWidget {
                                                                     child: Text(
                                                                       'En preparación',
                                                                       style: TextStyle(
-                                                                          fontSize: responsive.ip(2),
+                                                                          fontSize: responsive.ip(1.8),
                                                                           color: Colors.white,
                                                                           fontWeight: FontWeight.bold),
                                                                     ),
@@ -535,7 +542,7 @@ class PedidosDetallePage extends StatelessWidget {
                                                                     child: Column(
                                                                       children: [
                                                                         Text(
-                                                                          'Comanda para ${this.mesa.mesaNombre}',
+                                                                          'Comanda para ${this.widget.mesa.mesaNombre}',
                                                                           style: TextStyle(
                                                                             fontSize: responsive.ip(2.5),
                                                                             color: ColorsApp.black,
@@ -657,11 +664,12 @@ class PedidosDetallePage extends StatelessWidget {
                                                         onTap: () async {
                                                           _cargando.value = true;
                                                           final pedidoApi = PedidosMesaApi();
-                                                          final res = await pedidoApi.generarNuevoPedido(this.mesa.idMesa, this.mesa.mesaCapacidad);
+                                                          final res =
+                                                              await pedidoApi.generarNuevoPedido(widget.mesa.idMesa, widget.mesa.mesaCapacidad);
                                                           if (res) {
                                                             final mesasBloc = ProviderBloc.mesas(context);
                                                             mesasBloc.obtenerMesasPedidos();
-                                                            pedidosBloc.obtenerPedidosPorMesa(this.mesa.idMesa);
+                                                            pedidosBloc.obtenerPedidosPorMesa(widget.mesa.idMesa);
                                                             showToast2('Pedido Generado', ColorsApp.greenGrey);
                                                           } else {
                                                             showToast2('Ocurrió un error, inténtelo nuevamente', ColorsApp.redOrange);

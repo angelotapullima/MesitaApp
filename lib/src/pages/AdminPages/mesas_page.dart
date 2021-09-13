@@ -105,8 +105,9 @@ class MesasPage extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            top: 40,
+            top: responsive.hp(2),
             left: 3,
+            bottom: responsive.hp(1),
             child: Container(
               height: responsive.hp(23),
               width: responsive.wp(40),
