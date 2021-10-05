@@ -22,24 +22,25 @@ class MyApp extends StatelessWidget {
     precacheImage(AssetImage('assets/img/back.jpg'), context);
     return ProviderBloc(
       child: MaterialApp(
-          title: 'Mesita App',
-          debugShowCheckedModeBanner: false,
-          builder: (BuildContext context, Widget child) {
-            final MediaQueryData data = MediaQuery.of(context);
-            return MediaQuery(
-              data: data.copyWith(textScaleFactor: data.textScaleFactor > 2.0 ? 1.2 : data.textScaleFactor),
-              child: child,
-            );
-          },
-          initialRoute: 'splash',
-          routes: {
-            'splash': (BuildContext context) => Splash(),
-            'homePage': (BuildContext context) => HomePage(),
-            'login': (BuildContext context) => LoginPage(),
-            'meseroPage': (BuildContext context) => HomePageMozo(),
-            'cajeroPage': (BuildContext context) => HomePageCaja(),
-            'cocinaPage': (BuildContext context) => HomePageCocina(),
-          }),
+        title: 'Mesita App',
+        debugShowCheckedModeBanner: false,
+        builder: (BuildContext context, Widget child) {
+          final MediaQueryData data = MediaQuery.of(context);
+          return MediaQuery(
+            data: data.copyWith(textScaleFactor: data.textScaleFactor > 2.0 ? 1.2 : data.textScaleFactor),
+            child: child,
+          );
+        },
+        initialRoute: 'splash',
+        routes: {
+          'splash': (BuildContext context) => Splash(),
+          'homePage': (BuildContext context) => HomePage(),
+          'login': (BuildContext context) => LoginPage(),
+          'meseroPage': (BuildContext context) => HomePageMozo(),
+          'cajeroPage': (BuildContext context) => HomePageCaja(),
+          'cocinaPage': (BuildContext context) => HomePageCocina(),
+        },
+      ),
     );
   }
 }
